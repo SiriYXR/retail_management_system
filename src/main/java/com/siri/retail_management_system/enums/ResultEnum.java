@@ -4,7 +4,7 @@ package com.siri.retail_management_system.enums;
  * @author SiriYang
  * @title: ResultEnum
  * @projectName retail_management_system
- * @description: TODO
+ * @description: 结果枚举类型
  * @date 2019/4/15 14:02
  */
 public enum  ResultEnum {

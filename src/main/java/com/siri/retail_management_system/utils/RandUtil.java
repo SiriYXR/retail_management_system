@@ -8,7 +8,7 @@ import java.util.Random;
  * @author SiriYang
  * @title: RandUtil
  * @projectName siriblog
- * @description: TODO
+ * @description: 随机数工具
  * @date 2019/4/10 9:53
  */
 @Component

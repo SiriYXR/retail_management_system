@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author SiriYang
  * @title: LoginController
  * @projectName retail_management_system
- * @description: TODO
+ * @description: 登陆控制类
  * @date 2019/4/16 23:57
  */
 @Controller

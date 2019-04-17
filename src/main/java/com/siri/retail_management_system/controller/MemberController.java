@@ -19,7 +19,7 @@ import java.util.List;
  * @author SiriYang
  * @title: MemberController
  * @projectName retail_management_system
- * @description: TODO
+ * @description: 会员控制类
  * @date 2019/4/15 19:37
  */
 @Controller

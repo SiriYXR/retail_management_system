@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author SiriYang
  * @title: SettingController
  * @projectName retail_management_system
- * @description: TODO
+ * @description: 系统设置控制类
  * @date 2019/4/15 19:55
  */
 @Controller

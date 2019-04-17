@@ -6,7 +6,7 @@ import com.siri.retail_management_system.enums.ResultEnum;
  * @author SiriYang
  * @title: Result
  * @projectName retail_management_system
- * @description: TODO
+ * @description: 结果实体
  * @date 2019/4/15 14:02
  */
 public class Result<T> {
