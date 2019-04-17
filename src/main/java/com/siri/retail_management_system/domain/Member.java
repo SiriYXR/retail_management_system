@@ -35,7 +35,7 @@ public class Member {
      */
     @NotEmpty(message = "手机号不能为空")
     @Size(max = 100)
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false,length = 100,unique = true)
     private String telephon;
 
     /**
