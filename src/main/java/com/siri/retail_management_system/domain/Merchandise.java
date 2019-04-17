@@ -49,19 +49,19 @@ public class Merchandise {
      * 进价
      */
     @Column(nullable =false)
-    private Integer income_price=0;
+    private Double income_price=0.0;
 
     /**
      * 标准售价
      */
     @Column(nullable =false)
-    private Integer sale_price=0;
+    private Double sale_price=0.0;
 
     /**
      * 会员价
      */
     @Column(nullable =true)
-    private Integer member_price=0;
+    private Double member_price=0.0;
 
     /**
      * 创建时间
@@ -80,10 +80,12 @@ public class Merchandise {
     protected Merchandise() {
     }
 
-    public Merchandise(@NotEmpty(message = "商品名称不能为空") @Size(min = 1, max = 20) String name, Integer income_price, Integer sale_price) {
+    public Merchandise(@NotEmpty(message = "商品名称不能为空") @Size(min = 1, max = 20) String name, @NotEmpty(message = "供应商名称不能为空") @Size(min = 1, max = 20) String supplier, Double income_price, Double sale_price, Double member_price) {
         this.name = name;
+        this.supplier = supplier;
         this.income_price = income_price;
         this.sale_price = sale_price;
+        this.member_price = member_price;
     }
 
     public Integer getId() {
@@ -118,27 +120,27 @@ public class Merchandise {
         this.number = number;
     }
 
-    public Integer getIncome_price() {
+    public Double getIncome_price() {
         return income_price;
     }
 
-    public void setIncome_price(Integer income_price) {
+    public void setIncome_price(Double income_price) {
         this.income_price = income_price;
     }
 
-    public Integer getSale_price() {
+    public Double getSale_price() {
         return sale_price;
     }
 
-    public void setSale_price(Integer sale_price) {
+    public void setSale_price(Double sale_price) {
         this.sale_price = sale_price;
     }
 
-    public Integer getMember_price() {
+    public Double getMember_price() {
         return member_price;
     }
 
-    public void setMember_price(Integer member_price) {
+    public void setMember_price(Double member_price) {
         this.member_price = member_price;
     }
 

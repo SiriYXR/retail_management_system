@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!--Header-->
+    <div id="header" th:replace="~{fragments/header :: header-body}"></div>
+    <!--END Header-->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title"
+                            th:text="${merchandise!=null and merchandise.id!=null }?'编辑商品：'+${merchandise.name}: '添加商品'"></h4>
+                    </div>
+
+                    <form th:action="@{/merchandise/save}" method="post">
+                        <input hidden="true"
+                               th:value="${merchandise!=null and merchandise.id!=null }?${merchandise.id}: ''"
+                               name="id"/>
+                        <div class="col-md-12">
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">商品名称
+                                <input type="text" class="form-control" placeholder="请输入商品名称（必须）" name="name"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${merchandise!=null and merchandise.name!=null }?${merchandise.name}: ''"/>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;"
+                                 th:hidden="${merchandise!=null and merchandise.id!=null }?false:true">商品数量
+                                <input type="number" min="0" class="form-control" placeholder="请输入商品数量（必须）"
+                                       name="number"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${merchandise!=null and merchandise.number!=null }?${merchandise.number}: 0"/>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">进价
+                                <input type="number" min="0" step="0.01" class="form-control" placeholder="请输入进价（必须）"
+                                       name="income_price"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${merchandise!=null and merchandise.income_price!=null }?${merchandise.income_price}: 0"/>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">售价
+                                <input type="number" min="0" step="0.01" class="form-control" placeholder="请输入售价（必须）"
+                                       name="sale_price"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${merchandise!=null and merchandise.sale_price!=null }?${merchandise.sale_price}: 0"/>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">会员价
+                                <input type="number" min="0" step="0.01" class="form-control" placeholder="请输入会员价(可选)"
+                                       name="member_price"
+                                       th:value="${merchandise!=null and merchandise.member_price!=null }?${merchandise.member_price}: 0"/>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">供应商
+                                <input type="text" class="form-control" placeholder="请输入供应商（必须）"
+                                       name="supplier" required="required"
+                                       aria-required="true"
+                                       th:value="${merchandise!=null and merchandise.supplier!=null }?${merchandise.supplier}: ''"/>
+                            </div>
+
+                            <div class="text-left" style="padding: 0 10px 0 0;clear:both;">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">保存</button>
+                                <button onclick='location.href="/merchandise"' type="button"
+                                        class="btn btn-danger waves-effect waves-light">取消
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <!--Footer-->
+                <div id="footer-content" th:replace="~{fragments/footer :: footer-content}"></div>
+                <!--END Footer-->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="footer" th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>
