@@ -9,7 +9,7 @@ import java.util.List;
  * @author SiriYang
  * @title: AdminService
  * @projectName retail_management_system
- * @description: 管理员持久层接口
+ * @description: 管理员服务类接口
  * @date 2019/4/15 14:01
  */
 public interface AdminService  {

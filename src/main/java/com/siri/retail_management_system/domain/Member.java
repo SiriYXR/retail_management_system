@@ -7,13 +7,14 @@ import java.sql.Timestamp;
 
 /**
  * @author SiriYang
- * @title: Admin
+ * @title: Member
  * @projectName retail_management_system
- * @description: 管理员实体
- * @date 2019/4/15 13:34
+ * @description: 会员实体
+ * @date 2019/4/17 13:13
  */
 @Entity
-public class Admin {
+public class Member {
+
     /**
      * ID主键
      */
@@ -22,20 +23,26 @@ public class Admin {
     private Integer id;
 
     /**
-     * 管理员账号，管理员登录时的唯一标志
+     * 会员姓名
      */
-    @NotEmpty(message = "账号不能为空")
+    @NotEmpty(message = "姓名不能为空")
     @Size(min = 3,max = 20)
     @Column(nullable = false,length = 20,unique = true) // 映射为字段，值不能为空
-    private String username;
+    private String membername;
 
     /**
-     * 登陆密码
+     * 手机号
      */
-    @NotEmpty(message = "密码不能为空")
+    @NotEmpty(message = "手机号不能为空")
     @Size(max = 100)
     @Column(nullable = false,length = 100)
-    private String password;
+    private String telephon;
+
+    /**
+     * 会员积分
+     */
+    @Column(nullable =false, columnDefinition = "int default 0")
+    private Integer points=0;
 
     /**
      * 创建时间
@@ -51,13 +58,12 @@ public class Admin {
     @org.hibernate.annotations.UpdateTimestamp  // 由数据库自动创建时间
     private Timestamp updateTime;
 
-
-    protected Admin() {  // JPA 的规范要求无参构造函数；设为 protected 防止直接使用
+    protected Member() {
     }
 
-    public Admin(@NotEmpty(message = "账号不能为空") @Size(min = 3, max = 20) String username, @NotEmpty(message = "密码不能为空") @Size(max = 100) String password) {
-        this.username = username;
-        this.password = password;
+    public Member(@NotEmpty(message = "姓名不能为空") @Size(min = 3, max = 20) String membername, @NotEmpty(message = "手机号不能为空") @Size(max = 100) String telephon) {
+        this.membername = membername;
+        this.telephon = telephon;
     }
 
     public Integer getId() {
@@ -68,20 +74,28 @@ public class Admin {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getMembername() {
+        return membername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setMembername(String membername) {
+        this.membername = membername;
     }
 
-    public String getPassword() {
-        return password;
+    public String getTelephon() {
+        return telephon;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setTelephon(String telephon) {
+        this.telephon = telephon;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 
     public Timestamp getCreateTime() {
@@ -102,10 +116,11 @@ public class Admin {
 
     @Override
     public String toString() {
-        return "Admin{" +
+        return "Member{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", membername='" + membername + '\'' +
+                ", telephon='" + telephon + '\'' +
+                ", points=" + points +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';

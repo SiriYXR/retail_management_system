@@ -16,7 +16,7 @@ import java.util.List;
  * @author SiriYang
  * @title: AdminServiceImpl
  * @projectName retail_management_system
- * @description: 管理员持久层实列
+ * @description: 管理员服务类实列
  * @date 2019/4/15 14:03
  */
 @Service
@@ -104,6 +104,10 @@ public class AdminServiceImpl implements AdminService {
         return result;
     }
 
+    /**
+     * 通过id删除管理员
+     * @param id
+     */
     @Override
     public void delete(Integer id) {
         adminRepository.deleteById(id);
