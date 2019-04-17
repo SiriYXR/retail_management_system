@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<!--Header-->
+<div id="header" th:replace="~{fragments/header :: header-body}"></div>
+<!--END Header-->
+
+<!--Container-->
+<div id="container" class="">
+
+<p th:text="${errormsg}"></p>
+
+</div>
+<!--END Container-->
+
+<!--Footer-->
+<div id="footer" th:replace="~{fragments/footer :: footer-content}"></div>
+<!--END Footer-->
+
+</body>
+</html>

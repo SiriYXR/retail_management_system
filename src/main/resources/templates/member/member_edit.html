@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!--Header-->
+    <div id="header" th:replace="~{fragments/header :: header-body}"></div>
+    <!--END Header-->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title"会员管理</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <input hidden="true" th:value="${member!=null and member.id!=null }?${member.id}: ''" />
+
+                        <div class="form-group col-md-6" style="padding: 0 10px 0 0;">姓名
+                            <input type="text" class="form-control" placeholder="请输入姓名（必须）" name="title"
+                                   required="required"
+                                   aria-required="true"
+                                   th:value="${member!=null and member.name!=null }?${member.name}: ''"/>
+                        </div>
+
+                        <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">性别
+                            <input type="text" class="form-control" placeholder="请输入性别（必须）" name="title"
+                                   required="required"
+                                   aria-required="true"
+                                   th:value="${member!=null and member.gender!=null }?${member.gender}: ''"/>
+                        </div>
+
+                        <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">手机号
+                            <input type="text" class="form-control" placeholder="请输入手机号（必须）" name="title"
+                                   required="required"
+                                   aria-required="true"
+                                   th:value="${member!=null and member.number!=null }?${member.number}: ''"/>
+                        </div>
+
+
+                        <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">邮箱
+                            <input type="text" class="form-control" placeholder="请输入邮箱（选填）" name="title"
+                                   th:value="${member!=null and member.mailbox!=null }?${member.mailbox}: ''"/>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Footer-->
+                <div id="footer-content" th:replace="~{fragments/footer :: footer-content}"></div>
+                <!--END Footer-->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="footer" th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

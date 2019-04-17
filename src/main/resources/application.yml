@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+
+  thymeleaf:
+    encoding: UTF-8
+    cache: false
+    mode: HTML5
+    prefix: classpath:/templates/
+
+
+  datasource:
+    url: jdbc:mysql://localhost/retail_management?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 19980305
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+

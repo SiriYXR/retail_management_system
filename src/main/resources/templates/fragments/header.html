@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+
+    <title>
+        <th:block th:text="${title!=null?title:'零售管理系统'}+'- Retail Management'"></th:block>
+    </title>
+
+    <link href="../../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+
+    <link th:href="@{//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css}" rel="stylesheet"/>
+</head>
+
+<head th:fragment="head_login">
+    <meta charset="UTF-8">
+    <title>
+        <th:block th:text="${title!=null?title:'零售管理系统'}+'- Retail Management'"></th:block>
+    </title>
+
+    <link href="../../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+
+    <link th:href="@{//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css}" rel="stylesheet"/>
+
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+
+        .panel-shadow {
+            -moz-box-shadow: 0px 0px 10px 0px rgba(39, 49, 65, 0.1);
+            -webkit-box-shadow: 0px 0px 10px 0px rgba(39, 49, 65, 0.1);
+            box-shadow: 0px 0px 10px 0px rgba(39, 49, 65, 0.1);
+        }
+
+        .bg-overlay {
+            -moz-border-radius: 6px 6px 0 0;
+            -webkit-border-radius: 6px 6px 0 0;
+            background-color: rgba(47, 51, 62, 0.3);
+            border-radius: 6px 6px 0 0;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        .input-border {
+            font-size: 14px;
+            width: 100%;
+            height: 40px;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid #dadada;
+        }
+
+        .bg-img > h3 {
+            text-shadow: 0px 2px 3px #555;
+            color: #cac9c8;
+        }
+    </style>
+</head>
+
+<div th:fragment="header-body">
+
+
+    <div class="tobar navbar navbar-default">
+        <div class="topbar-left">
+            <div class="text-center p-t-10" style="margin: 0 auto;">
+                <div class="pull-left" style="padding-left: 10px;">
+                    <a th:href="@{/index}">
+                        <img th:src="@{/img/logo.png}" width="50" height="50"/>
+                    </a>
+                </div>
+                <div class="pull-left" style="padding-left: 10px;">
+                    <span style="font-size: 28px; color: #2f353f; line-height: 50px;">零售管理系统</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+            <div id="sidebar-menu">
+                <ul>
+                    <li th:class="${active}=='panel'?'active':''">
+                        <a th:href="@{/index}"
+                           th:class="${active}=='panel'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-dashboard" aria-hidden="true"></i><span> 仪表盘 </span></a>
+                    </li>
+                    <li th:class="${active}=='merchandise'?'active':''">
+                        <a th:href="@{/merchandise}"
+                           th:class="${active}=='merchandise'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 商品管理 </span></a>
+                    </li>
+                    <li th:class="${active}=='income'?'active':''">
+                        <a th:href="@{/income}"
+                           th:class="${active}=='income'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-list" aria-hidden="true"></i><span> 入货管理 </span></a>
+                    </li>
+                    <li th:class="${active}=='sale'?'active':''">
+                        <a th:href="@{/sale}" th:class="${active}=='sale'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-file-text" aria-hidden="true"></i><span> 出货管理 </span></a>
+                    </li>
+                    <li th:class="${active}=='promotion'?'active':''">
+                        <a th:href="@{/promotion}"
+                           th:class="${active}=='promotion'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-comments" aria-hidden="true"></i><span> 促销管理 </span></a>
+                    </li>
+                    <li th:class="${active}=='statistic'?'active':''">
+                        <a th:href="@{/statistic}"
+                           th:class="${active}=='statistic'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-tags" aria-hidden="true"></i><span> 数据统计 </span></a>
+                    </li>
+                    <li th:class="${active}=='member'?'active':''">
+                        <a th:href="@{/member}"
+                           th:class="${active}=='member'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-cloud-upload" aria-hidden="true"></i><span> 会员管理 </span></a>
+                    </li>
+                    <li th:class="${active}=='admin'?'active':''">
+                        <a th:href="@{/admin}" th:class="${active}=='admin'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-link" aria-hidden="true"></i><span> 管理员管理 </span></a>
+                    </li>
+                    <li th:class="${active}=='setting'?'active':''">
+                        <a th:href="@{/setting}"
+                           th:class="${active}=='setting'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-gear" aria-hidden="true"></i><span> 系统设置 </span></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+</html>
