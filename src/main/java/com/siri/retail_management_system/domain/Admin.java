@@ -25,7 +25,7 @@ public class Admin {
      * 管理员账号，管理员登录时的唯一标志
      */
     @NotEmpty(message = "账号不能为空")
-    @Size(min = 3,max = 20)
+    @Size(min = 1,max = 20)
     @Column(nullable = false,length = 20,unique = true) // 映射为字段，值不能为空
     private String username;
 
@@ -55,7 +55,7 @@ public class Admin {
     protected Admin() {  // JPA 的规范要求无参构造函数；设为 protected 防止直接使用
     }
 
-    public Admin(@NotEmpty(message = "账号不能为空") @Size(min = 3, max = 20) String username, @NotEmpty(message = "密码不能为空") @Size(max = 100) String password) {
+    public Admin(@NotEmpty(message = "账号不能为空") @Size(min = 1, max = 20) String username, @NotEmpty(message = "密码不能为空") @Size(max = 100) String password) {
         this.username = username;
         this.password = password;
     }

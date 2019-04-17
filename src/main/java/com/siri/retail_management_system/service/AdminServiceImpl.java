@@ -109,6 +109,7 @@ public class AdminServiceImpl implements AdminService {
      * @param id
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         adminRepository.deleteById(id);
     }

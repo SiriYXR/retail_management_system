@@ -26,7 +26,7 @@ public class Member {
      * 会员姓名
      */
     @NotEmpty(message = "姓名不能为空")
-    @Size(min = 3,max = 20)
+    @Size(min = 1,max = 20)
     @Column(nullable = false,length = 20,unique = true) // 映射为字段，值不能为空
     private String membername;
 
@@ -61,7 +61,7 @@ public class Member {
     protected Member() {
     }
 
-    public Member(@NotEmpty(message = "姓名不能为空") @Size(min = 3, max = 20) String membername, @NotEmpty(message = "手机号不能为空") @Size(max = 100) String telephon) {
+    public Member(@NotEmpty(message = "姓名不能为空") @Size(min = 1, max = 20) String membername, @NotEmpty(message = "手机号不能为空") @Size(max = 100) String telephon) {
         this.membername = membername;
         this.telephon = telephon;
     }

@@ -7,7 +7,9 @@ import com.siri.retail_management_system.repository.MemberRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ import java.util.List;
  * @description: 会员服务类实例
  * @date 2019/4/17 13:25
  */
+@Service
 public class MemberServiceImpl implements MemberService {
 
     private final static Logger logger= LoggerFactory.getLogger(MemberServiceImpl.class);
@@ -92,6 +95,7 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
+    @Transactional
     public Result<Member> addOrUpdate(Member member) {
         Result<Member> result=new Result<>();
         Member m=memberRepository.save(member);
@@ -110,6 +114,7 @@ public class MemberServiceImpl implements MemberService {
      * @param id
      */
     @Override
+    @Transactional
     public void delete(Integer id) {
         memberRepository.deleteById(id);
     }
