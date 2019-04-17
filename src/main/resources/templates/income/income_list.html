@@ -14,22 +14,7 @@
                         <h4 class="page-title">进货列表</h4>
                     </div>
 
-                    <div class="col-md-12">
-                        <input hidden="true" th:value="${admin!=null and admin.id!=null }?${admin.id}: ''" />
-                        <div class="form-group col-md-6" style="padding: 0 10px 0 0;">账户
-                            <input type="text" class="form-control" placeholder="请输入账户（必须）" name="title"
-                                   required="required"
-                                   aria-required="true"
-                                   th:value="${admin!=null and admin.username!=null }?${admin.username}: ''"/>
-                        </div>
 
-                        <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">密码
-                            <input type="text" class="form-control" placeholder="请输入密码（必须）" name="title"
-                                   required="required"
-                                   aria-required="true"
-                                   th:value="${admin!=null and admin.password!=null }?${admin.password}: ''"/>
-                        </div>
-                    </div>
 
 
                 </div>

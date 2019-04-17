@@ -22,24 +22,24 @@ import java.util.List;
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    private final static Logger logger= LoggerFactory.getLogger(MemberServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
     @Autowired
     MemberRepository memberRepository;
 
     /**
      * 通过id查询会员
-   * @param id
+     *
+     * @param id
      * @return
      */
     @Override
     public Result<Member> findOne(Integer id) {
-        Result<Member> result=new Result<>();
-        Member member=memberRepository.findById(id).get();
-        if(member==null){
+        Result<Member> result = new Result<>();
+        Member member = memberRepository.findById(id).get();
+        if (member == null) {
             result.setResultEnum(ResultEnum.MEMBER_ID_WRONG);
-        }
-        else{
+        } else {
             logger.info(member.toString());
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(member);
@@ -49,17 +49,17 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 通过姓名查询会员
+     *
      * @param membername
      * @return
      */
     @Override
     public Result<Member> findByMembername(String membername) {
-        Result<Member> result=new Result<>();
-        Member member=memberRepository.findByMembername(membername);
-        if(member==null){
+        Result<Member> result = new Result<>();
+        Member member = memberRepository.findByMembername(membername);
+        if (member == null) {
             result.setResultEnum(ResultEnum.MEMBER_NAME_WRONG);
-        }
-        else{
+        } else {
             logger.info(member.toString());
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(member);
@@ -70,18 +70,18 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 查询所有会员
+     *
      * @return
      */
     @Override
     public Result<List<Member>> findAll() {
-        Result<List<Member>> result=new Result<>();
+        Result<List<Member>> result = new Result<>();
 
-        List<Member> memberList=memberRepository.findAll();
+        List<Member> memberList = memberRepository.findAll();
 
-        if(memberList==null){
+        if (memberList == null) {
             result.setResultEnum(ResultEnum.MEMBER_FIND_ERROR);
-        }
-        else {
+        } else {
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(memberList);
         }
@@ -91,19 +91,19 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 添加或更新会员
+     *
      * @param member
      * @return
      */
     @Override
     @Transactional
     public Result<Member> addOrUpdate(Member member) {
-        Result<Member> result=new Result<>();
-        Member m=memberRepository.save(member);
-        if(m!=null){
+        Result<Member> result = new Result<>();
+        Member m = memberRepository.save(member);
+        if (m != null) {
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(m);
-        }
-        else {
+        } else {
             result.setResultEnum(ResultEnum.MEMBER_ADD_ERROR);
         }
         return result;
@@ -111,6 +111,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 通过id删除会员
+     *
      * @param id
      */
     @Override
