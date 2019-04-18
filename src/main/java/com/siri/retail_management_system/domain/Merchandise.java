@@ -3,6 +3,7 @@ package com.siri.retail_management_system.domain;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -31,14 +32,6 @@ public class Merchandise {
     private String name;
 
     /**
-     * 供应商名称
-     */
-    @NotEmpty(message = "供应商名称不能为空")
-    @Size(min = 1,max = 20)
-    @Column(nullable = true,length = 20)
-    private String supplier;
-
-    /**
      * 库存数量
      */
     @Column(nullable =false, columnDefinition = "int default 0")
@@ -48,19 +41,19 @@ public class Merchandise {
     /**
      * 进价
      */
-    @Column(nullable =false)
+    @Column(nullable =false,precision = 12,scale = 2)
     private Double income_price=0.0;
 
     /**
      * 标准售价
      */
-    @Column(nullable =false)
+    @Column(nullable =false,precision = 12,scale = 2)
     private Double sale_price=0.0;
 
     /**
      * 会员价
      */
-    @Column(nullable =true)
+    @Column(nullable =true,precision = 12,scale = 2)
     private Double member_price=0.0;
 
     /**
@@ -80,9 +73,8 @@ public class Merchandise {
     protected Merchandise() {
     }
 
-    public Merchandise(@NotEmpty(message = "商品名称不能为空") @Size(min = 1, max = 20) String name, @NotEmpty(message = "供应商名称不能为空") @Size(min = 1, max = 20) String supplier, Double income_price, Double sale_price, Double member_price) {
+    public Merchandise(@NotEmpty(message = "商品名称不能为空") @Size(min = 1, max = 20) String name, Double income_price, Double sale_price, Double member_price) {
         this.name = name;
-        this.supplier = supplier;
         this.income_price = income_price;
         this.sale_price = sale_price;
         this.member_price = member_price;
@@ -102,14 +94,6 @@ public class Merchandise {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(String supplier) {
-        this.supplier = supplier;
     }
 
     public Integer getNumber() {
@@ -165,7 +149,6 @@ public class Merchandise {
         return "Merchandise{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", supplier='" + supplier + '\'' +
                 ", number=" + number +
                 ", income_price=" + income_price +
                 ", sale_price=" + sale_price +

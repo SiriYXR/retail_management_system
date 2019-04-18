@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -101,8 +102,7 @@ public class MerchandiseController {
                                   @RequestParam("number") Integer number,
                                   @RequestParam("income_price") Double income_price,
                                   @RequestParam("sale_price") Double sale_price,
-                                  @RequestParam("member_price") Double member_price,
-                                  @RequestParam("supplier") String supplier) {
+                                  @RequestParam("member_price") Double member_price) {
 
         model.addAttribute("title", "商品管理");
         model.addAttribute("active", "merchandise");
@@ -116,7 +116,6 @@ public class MerchandiseController {
                 merchandise.setIncome_price(income_price);
                 merchandise.setSale_price(sale_price);
                 merchandise.setMember_price(member_price);
-                merchandise.setSupplier(supplier);
 
                 result = merchandiseService.addOrUpdate(merchandise);
                 if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
@@ -129,7 +128,7 @@ public class MerchandiseController {
                 return "errors";
             }
         } else {
-            Merchandise Merchandise = new Merchandise(name,supplier, income_price, sale_price,member_price);
+            Merchandise Merchandise = new Merchandise(name,income_price, sale_price,member_price);
             Result<Merchandise> result = merchandiseService.addOrUpdate(Merchandise);
             if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
                 model.addAttribute("title", "错误");
