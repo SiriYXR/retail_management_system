@@ -12,9 +12,51 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h4 class="page-title">进货列表</h4>
+                        <div class="text-right">
+                            <a th:href="@{/income/add}"
+                               class="btn btn-success btn-sm waves-effect waves-light m-b-5"><i
+                                    class="fa fa-edit"></i> <span>添加</span></a>
+                        </div>
                     </div>
 
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th >商品名</th>
+                                <th width="8%">数量</th>
+                                <th width="8%">进价</th>
+                                <th >供应商</th>
+                                <th width="14%">创建时间</th>
+                                <th width="14%">修改时间</th>
+                                <th width="13%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="income : ${incomeList}">
+                                <tr th:cid="${income.id}">
+                                    <td><th:block th:text="${income.id}"/></td>
+                                    <td><th:block th:text="${income.merchandisename}"/></td>
+                                    <td><th:block th:text="${income.number}"/></td>
+                                    <td><th:block th:text="${income.income_price}"/></td>
+                                    <td><th:block th:text="${income.supplier}"/></td>
+                                    <td><th:block th:text="${income.createTime}"/></td>
+                                    <td><th:block th:text="${income.updateTime}"/></td>
+                                    <td>
+                                        <a th:href="@{/income/edit/{id}(id=${income.id})}"
+                                           class="btn btn-primary btn-sm waves-effect waves-light m-b-5"><i
+                                                class="fa fa-edit"></i> <span>编辑</span></a>
+                                        <a  th:href="@{/income/delete/{id}(id=${income.id})}" th:onclick="'return  delPost()'"
+                                            class="btn btn-danger btn-sm waves-effect waves-light m-b-5"><i
+                                                class="fa fa-trash-o"></i> <span>删除</span></a>
+                                    </td>
+                                </tr>
+                            </th:block>
 
+                            </tbody>
+                        </table>
+                    </div>
 
 
                 </div>

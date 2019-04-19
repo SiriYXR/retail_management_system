@@ -128,8 +128,8 @@ public class MerchandiseController {
                 return "errors";
             }
         } else {
-            Merchandise Merchandise = new Merchandise(name,income_price, sale_price,member_price);
-            Result<Merchandise> result = merchandiseService.addOrUpdate(Merchandise);
+            Merchandise merchandise = new Merchandise(name,income_price, sale_price,member_price);
+            Result<Merchandise> result = merchandiseService.addOrUpdate(merchandise);
             if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
                 model.addAttribute("title", "错误");
                 model.addAttribute("errormsg", result.getErrMessage());
@@ -154,4 +154,7 @@ public class MerchandiseController {
 
         return "redirect:/merchandise";
     }
+
+
+
 }

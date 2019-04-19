@@ -26,6 +26,10 @@ public enum ResultEnum {
     MERCHANDISE_ID_WRONG(202, "商品ID不存在"),
     MERCHANDISE_ADD_ERROR(203, "商品添加/保存失败"),
     MERCHANDISE_FIND_ERROR(204, "商品查询失败"),
+
+    INCOME_ID_WRONG(201, "进货记录ID不存在"),
+    INCOME_ADD_ERROR(202, "进货记录添加/保存失败"),
+    INCOME_FIND_ERROR(203, "进货记录查询失败"),
     ;
 
     private Integer code;

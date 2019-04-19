@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -91,6 +92,7 @@ public class MerchandiseServiceImpl implements MerchandiseService {
      * @return
      */
     @Override
+    @Transactional
     public Result<Merchandise> addOrUpdate(Merchandise merchandise) {
         Result<Merchandise> result = new Result<>();
         Merchandise m = merchandiseRepository.save(merchandise);
