@@ -155,6 +155,27 @@ public class MerchandiseController {
         return "redirect:/merchandise";
     }
 
+    @GetMapping("/info/{id}")
+    public String infoMerchandise(Model model,
+                                    @PathVariable("id") Integer id,
+                                    HttpServletRequest request) {
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
+            return "redirect:/login";
 
+        Result<Merchandise> result = merchandiseService.findOne(id);
+
+        if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "商品详情");
+            model.addAttribute("merchandise", result.getData());
+        } else {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            logger.error(result.getErrMessage());
+            return "errors";
+        }
+
+        return "merchandise/merchandise_info";
+    }
 
 }

@@ -20,10 +20,9 @@
                             <input hidden="true" th:value="${income!=null and income.id!=null }?${income.id}: ''" name="id"/>
 
                             <div class="form-group col-md-6" style="padding: 0 10px 0 0;">商品名称
-                                <input type="text" class="form-control" placeholder="请输入名称（必须）" name="merchandisename"
-                                       required="required"
-                                       aria-required="true"
-                                       th:value="${income!=null and income.merchandisename!=null }?${income.merchandisename}: ''"/>
+                                    <input type="text" class="form-control" name="merchandisename"
+                                           readonly="true"
+                                           th:value="${merchandisename}"/>
                             </div>
 
                             <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">数量

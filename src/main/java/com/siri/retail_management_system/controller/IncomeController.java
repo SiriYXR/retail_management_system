@@ -1,9 +1,11 @@
 package com.siri.retail_management_system.controller;
 
 import com.siri.retail_management_system.domain.InCome;
+import com.siri.retail_management_system.domain.Merchandise;
 import com.siri.retail_management_system.domain.Result;
 import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.InComeServiceImpl;
+import com.siri.retail_management_system.service.MerchandiseServiceImpl;
 import com.siri.retail_management_system.utils.CookieUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +74,8 @@ public class IncomeController {
         if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "进货管理");
             model.addAttribute("income", result.getData());
+            model.addAttribute("merchandisename",result.getData().getMerchandisename());
+
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
@@ -82,8 +86,9 @@ public class IncomeController {
         return "income/income_edit";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/add/{name}")
     public String addMerchandise(Model model,
+                                 @PathVariable("name") String name,
                                  HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
@@ -91,6 +96,8 @@ public class IncomeController {
 
         model.addAttribute("title", "进货管理");
         model.addAttribute("active", "income");
+
+        model.addAttribute("merchandisename",name);
 
         return "income/income_edit";
     }
