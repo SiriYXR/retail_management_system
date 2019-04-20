@@ -119,4 +119,24 @@ public class MemberServiceImpl implements MemberService {
     public void delete(Integer id) {
         memberRepository.deleteById(id);
     }
+
+    /**
+     * 计算会员数量
+     * @return
+     */
+    @Override
+    public Result<Integer> countMember() {
+        Result<Integer> result=new Result<>();
+
+        List<Member> memberList = memberRepository.findAll();
+
+        if (memberList == null) {
+            result.setResultEnum(ResultEnum.MEMBER_FIND_ERROR);
+        } else {
+            result.setResultEnum(ResultEnum.SUCCESS);
+            result.setData(memberList.size());
+        }
+
+        return result;
+    }
 }

@@ -5,6 +5,7 @@ import com.siri.retail_management_system.domain.Result;
 import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.MemberService;
 import com.siri.retail_management_system.utils.CookieUtil;
+import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author SiriYang
@@ -147,5 +150,31 @@ public class MemberController {
         memberService.delete(id);
 
         return "redirect:/member";
+    }
+
+    @PostMapping("/telephone")
+    public void ajaxFindByTelephone(@RequestBody Map<String, Object> param, HttpServletResponse resp) throws Exception {
+
+        logger.info(param.toString());
+
+        JSONObject jsonObject = new JSONObject();
+
+        Result<Member> result = memberService.findByMembername(param.get("telephone").toString());
+
+        if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
+            jsonObject.put("flag", "success");
+            jsonObject.put("hintMessage", result.getData().getMembername());
+            jsonObject.put("memberID", result.getData().getId());
+
+        } else {
+            jsonObject.put("flag", "failure");
+            jsonObject.put("hintMessage", "无");
+            jsonObject.put("memberID", "");
+        }
+
+        logger.info(jsonObject.toJSONString());
+        resp.setContentType("text/html;charset=UTF-8");
+        resp.getWriter().println(jsonObject.toJSONString());
+        resp.getWriter().close();
     }
 }

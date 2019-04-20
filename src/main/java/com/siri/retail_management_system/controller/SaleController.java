@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,5 +35,21 @@ public class SaleController {
         model.addAttribute("active", "sale");
 
         return "sale/sale_list";
+    }
+
+    @GetMapping("/add/{name}")
+    public String addMerchandise(Model model,
+                                 @PathVariable("name") String name,
+                                 HttpServletRequest request) {
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
+            return "redirect:/login";
+
+        model.addAttribute("title", "出货管理");
+        model.addAttribute("active", "sale");
+
+        model.addAttribute("merchandisename",name);
+
+        return "sale/sale_edit";
     }
 }

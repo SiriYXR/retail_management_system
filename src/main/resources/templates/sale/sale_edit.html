@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!--Header-->
+    <div id="header" th:replace="~{fragments/header :: header-body}"></div>
+    <!--END Header-->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title"
+                            th:text="${sale!=null and sale.id!=null }?'编辑出货记录': '添加出货记录'"></h4>
+                    </div>
+
+                    <form th:action="@{/sale/save}" method="post">
+                        <div class="col-md-12">
+                            <input hidden="true" th:value="${sale!=null and sale.id!=null }?${sale.id}: ''" name="id"/>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">商品名称
+                                <input type="text" class="form-control" name="merchandisename"
+                                       readonly="true"
+                                       th:value="${merchandisename}"/>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">数量
+                                <input type="text" class="form-control" placeholder="请输入数量（必须）" name="number"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${sale!=null and sale.number!=null }?${sale.number}: ''"/>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">会员手机号
+                                <input type="text" class="form-control" placeholder="请输入手机号" name="sale_price"
+                                       required="required"
+                                       aria-required="true"
+                                       id="telephone"
+                                       onkeyup="showHint()"
+                                       th:value="${sale!=null and sale.sale_price!=null }?${sale.sale_price}: ''"/>
+
+                            </div>
+                            <p>提示信息: <span id="txtHint"></span></p>
+
+                            <div class="text-left" style="padding: 0 10px 0 0;clear:both;">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">保存</button>
+                                <button onclick='location.href="/sale"' type="button"
+                                        class="btn btn-danger waves-effect waves-light">取消
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <!--Footer-->
+                <div id="footer-content" th:replace="~{fragments/footer :: footer-content}"></div>
+                <!--END Footer-->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="footer" th:replace="~{fragments/footer :: footer}"></div>
+<!--<script>-->
+<!--function showHint(str)-->
+<!--{-->
+<!--var xmlhttp;-->
+<!--if (str.length==0)-->
+<!--{-->
+<!--document.getElementById("txtHint").innerHTML="";-->
+<!--return;-->
+<!--}-->
+<!--if (window.XMLHttpRequest)-->
+<!--{-->
+<!--// IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码-->
+<!--xmlhttp=new XMLHttpRequest();-->
+<!--}-->
+<!--else-->
+<!--{-->
+<!--// IE6, IE5 浏览器执行代码-->
+<!--xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");-->
+<!--}-->
+<!--xmlhttp.onreadystatechange=function()-->
+<!--{-->
+<!--if (xmlhttp.readyState==4 && xmlhttp.status==200)-->
+<!--{-->
+<!--document.getElementById("txtHint").innerHTML=xmlhttp.responseText;-->
+<!--}-->
+<!--}-->
+<!--xmlhttp.open("GET","@{/sale/member}"+str,true);-->
+<!--xmlhttp.send();-->
+<!--}-->
+<!--</script>-->
+
+
+<script type="text/javascript" th:inline="javascript">
+
+    var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+
+    /*<![CDATA[*/
+    var telephone = document.getElementById('telephone');
+
+    function showHint() {
+        if (telephone.length == 0) {
+            $('#txtHint').text('');
+            return;
+        }
+
+        $.ajax({
+            type: 'post',
+            dataType: 'text',
+            url: basePath + '/member/telephone',
+            dataType: 'json',
+            contentType: 'application/json',
+            async: true,
+            data: JSON.stringify({
+                "telephone": telephone.value
+            }),
+            cache: false,
+            success: function (data) {
+                $('#txtHint').text(data.hintMessage);
+            }
+        });
+    }
+
+    /*]]>*/
+</script>
+
+
+</body>
+
+</html>

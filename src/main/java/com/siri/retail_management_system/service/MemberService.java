@@ -23,4 +23,6 @@ public interface MemberService {
     public Result<Member> addOrUpdate(Member member);
 
     public void delete(Integer id);
+
+    public Result<Integer> countMember();
 }

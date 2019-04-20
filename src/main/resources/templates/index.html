@@ -22,7 +22,7 @@
                             <div class="mini-stat clearfix bx-shadow bg-info">
                                 <span class="mini-stat-icon"><i class="fa fa-quote-right" aria-hidden="true"></i></span>
                                 <div class="mini-stat-info text-right">
-                                    现存<span class="counter" th:text="${articles}"></span>件商品
+                                    现存<span class="counter" th:text="${merchandiseNum}"></span>件商品
                                 </div>
                             </div>
                         </div>
@@ -30,7 +30,7 @@
                             <div class="mini-stat clearfix bg-purple bx-shadow">
                                 <span class="mini-stat-icon"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
                                 <div class="mini-stat-info text-right">
-                                    总计<span class="counter" th:text="${comments}"></span>类商品
+                                    总计<span class="counter" th:text="${merchandiseClass}"></span>类商品
                                 </div>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                                 <span class="mini-stat-icon"><i class="fa fa-cloud-upload"
                                                                 aria-hidden="true"></i></span>
                                 <div class="mini-stat-info text-right">
-                                    正在进行<span class="counter" th:text="${attachs}"></span>个促销活动
+                                    正在进行<span class="counter" th:text="${promotionNum}"></span>个促销活动
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                             <div class="mini-stat clearfix bg-primary bx-shadow">
                                 <span class="mini-stat-icon"><i class="fa fa-link" aria-hidden="true"></i></span>
                                 <div class="mini-stat-info text-right">
-                                    已经注册<span class="counter" th:text="${links}"></span>个会员
+                                    已经注册<span class="counter" th:text="${memberNum}"></span>个会员
                                 </div>
                             </div>
                         </div>
@@ -62,6 +62,11 @@
                                     <h4 class="panel-title">最新出货记录</h4>
                                 </div>
                                 <div class="panel-body">
+                                    <div th:if="${salelog}== null or ${#lists.size(salelog)}==0">
+                                        <div class="alert alert-warning">
+                                            还没有出货记录.
+                                        </div>
+                                    </div>
                                     <ul class="list-group">
                                         <!--<li class="list-group-item" th:each="article : ${articles}">-->
                                         <!--<span class="badge badge-primary"-->
@@ -76,12 +81,12 @@
                         <div class="col-md-4">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title">最新入货记录</h4>
+                                    <h4 class="panel-title">最新进货记录</h4>
                                 </div>
                                 <div class="panel-body">
-                                    <div th:if="${comments}== null or ${#lists.size(comments)}==0">
+                                    <div th:if="${incomelog}== null or ${#lists.size(incomelog)}==0">
                                         <div class="alert alert-warning">
-                                            还没有收到留言.
+                                            还没有进货记录.
                                         </div>
                                     </div>
                                     <ul class="list-group">
@@ -109,6 +114,11 @@
                                     <h4 class="panel-title">系统日志</h4>
                                 </div>
                                 <div class="panel-body">
+                                    <div th:if="${systemlog}== null or ${#lists.size(systemlog)}==0">
+                                        <div class="alert alert-warning">
+                                            还没有系统日志.
+                                        </div>
+                                    </div>
                                     <ul class="list-group">
                                         <!--<li class="list-group-item" th:each="log : ${logs}">-->
                                         <!--<span th:text="${commons.fmtdate(log.created, 'yyyy-MM-dd HH:mm:ss')} +' => '+ ${log.action}"></span>-->
