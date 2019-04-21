@@ -33,15 +33,16 @@
                             </div>
 
                             <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">会员手机号
-                                <input type="text" class="form-control" placeholder="请输入手机号" name="sale_price"
-                                       required="required"
-                                       aria-required="true"
+                                <input type="text" class="form-control" placeholder="请输入手机号" name="telephone"
                                        id="telephone"
                                        onkeyup="showHint()"
                                        th:value="${sale!=null and sale.sale_price!=null }?${sale.sale_price}: ''"/>
 
                             </div>
-                            <p>提示信息: <span id="txtHint"></span></p>
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">
+                                查询结果: <span id="txtHint"></span>
+                            </div>
+
 
                             <div class="text-left" style="padding: 0 10px 0 0;clear:both;">
                                 <button type="submit" class="btn btn-primary waves-effect waves-light">保存</button>
@@ -61,36 +62,6 @@
     </div>
 </div>
 <div id="footer" th:replace="~{fragments/footer :: footer}"></div>
-<!--<script>-->
-<!--function showHint(str)-->
-<!--{-->
-<!--var xmlhttp;-->
-<!--if (str.length==0)-->
-<!--{-->
-<!--document.getElementById("txtHint").innerHTML="";-->
-<!--return;-->
-<!--}-->
-<!--if (window.XMLHttpRequest)-->
-<!--{-->
-<!--// IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码-->
-<!--xmlhttp=new XMLHttpRequest();-->
-<!--}-->
-<!--else-->
-<!--{-->
-<!--// IE6, IE5 浏览器执行代码-->
-<!--xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");-->
-<!--}-->
-<!--xmlhttp.onreadystatechange=function()-->
-<!--{-->
-<!--if (xmlhttp.readyState==4 && xmlhttp.status==200)-->
-<!--{-->
-<!--document.getElementById("txtHint").innerHTML=xmlhttp.responseText;-->
-<!--}-->
-<!--}-->
-<!--xmlhttp.open("GET","@{/sale/member}"+str,true);-->
-<!--xmlhttp.send();-->
-<!--}-->
-<!--</script>-->
 
 
 <script type="text/javascript" th:inline="javascript">

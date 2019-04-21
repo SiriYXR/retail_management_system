@@ -67,6 +67,24 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
+    /**
+     * 通过手机号查询会员
+     * @param telephone
+     * @return
+     */
+    @Override
+    public Result<Member> findByTelephone(String telephone) {
+        Result<Member> result = new Result<>();
+        Member member = memberRepository.findByTelephon(telephone);
+        if (member == null) {
+            result.setResultEnum(ResultEnum.MEMBER_TELEPHONE_WRONG);
+        } else {
+            logger.info(member.toString());
+            result.setResultEnum(ResultEnum.SUCCESS);
+            result.setData(member);
+        }
+        return result;
+    }
 
     /**
      * 查询所有会员

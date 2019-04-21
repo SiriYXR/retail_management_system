@@ -159,7 +159,7 @@ public class MemberController {
 
         JSONObject jsonObject = new JSONObject();
 
-        Result<Member> result = memberService.findByMembername(param.get("telephone").toString());
+        Result<Member> result = memberService.findByTelephone(param.get("telephone").toString());
 
         if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
             jsonObject.put("flag", "success");

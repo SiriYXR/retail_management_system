@@ -18,4 +18,11 @@ public interface MemberRepository extends JpaRepository<Member,Integer> {
      * @return
      */
     Member findByMembername(String membername);
+
+    /**
+     * 通过手机号查询会员
+     * @param telephone
+     * @return
+     */
+    Member findByTelephon(String telephone);
 }

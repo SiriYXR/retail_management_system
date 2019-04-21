@@ -30,6 +30,8 @@ public class IndexController {
 
     private final static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
+    @Autowired
+    MerchandiseServiceImpl merchandiseService;
 
     @Autowired
     MemberService memberService;

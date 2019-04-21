@@ -60,7 +60,7 @@ public class IncomeController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editMerchandise(Model model,
+    public String editInCome(Model model,
                                   @PathVariable("id") Integer id,
                                   HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
@@ -87,7 +87,7 @@ public class IncomeController {
     }
 
     @GetMapping("/add/{name}")
-    public String addMerchandise(Model model,
+    public String addInCome(Model model,
                                  @PathVariable("name") String name,
                                  HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
@@ -103,7 +103,7 @@ public class IncomeController {
     }
 
     @PostMapping("/save")
-    public String saveMerchandise(Model model,
+    public String saveInCome(Model model,
                                   @RequestParam("id") Integer id,
                                   @RequestParam("merchandisename") String merchandisename,
                                   @RequestParam("number") Integer number,
@@ -111,7 +111,7 @@ public class IncomeController {
                                   @RequestParam("supplier") String supplier) {
 
         model.addAttribute("title", "进货管理");
-        model.addAttribute("active", "merchandise");
+        model.addAttribute("active", "income");
 
         if (id != null) {
             Result<InCome> result = inComeService.findOne(id);
@@ -146,7 +146,7 @@ public class IncomeController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteMerchandise(Model model,
+    public String deleteInCome(Model model,
                                     @PathVariable("id") Integer id,
                                     HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);

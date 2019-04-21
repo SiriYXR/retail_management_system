@@ -18,6 +18,8 @@ public interface MemberService {
 
     public Result<Member> findByMembername(String membername);
 
+    public Result<Member> findByTelephone(String telephone);
+
     public Result<List<Member>> findAll();
 
     public Result<Member> addOrUpdate(Member member);

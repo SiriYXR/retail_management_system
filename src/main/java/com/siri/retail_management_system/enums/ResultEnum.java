@@ -21,15 +21,20 @@ public enum ResultEnum {
     MEMBER_ID_WRONG(202, "会员ID不存在"),
     MEMBER_ADD_ERROR(203, "会员添加/保存失败"),
     MEMBER_FIND_ERROR(204, "会员查询失败"),
+    MEMBER_TELEPHONE_WRONG(205, "会员手机号查询失败"),
 
-    MERCHANDISE_NAME_WRONG(201, "商品名不存在"),
-    MERCHANDISE_ID_WRONG(202, "商品ID不存在"),
-    MERCHANDISE_ADD_ERROR(203, "商品添加/保存失败"),
-    MERCHANDISE_FIND_ERROR(204, "商品查询失败"),
+    MERCHANDISE_NAME_WRONG(301, "商品名不存在"),
+    MERCHANDISE_ID_WRONG(302, "商品ID不存在"),
+    MERCHANDISE_ADD_ERROR(303, "商品添加/保存失败"),
+    MERCHANDISE_FIND_ERROR(304, "商品查询失败"),
 
-    INCOME_ID_WRONG(201, "进货记录ID不存在"),
-    INCOME_ADD_ERROR(202, "进货记录添加/保存失败"),
-    INCOME_FIND_ERROR(203, "进货记录查询失败"),
+    INCOME_ID_WRONG(401, "进货记录ID不存在"),
+    INCOME_ADD_ERROR(402, "进货记录添加/保存失败"),
+    INCOME_FIND_ERROR(403, "进货记录查询失败"),
+
+    SALE_ID_WRONG(501, "出货记录ID不存在"),
+    SALE_ADD_ERROR(502, "出货记录添加/保存失败"),
+    SALE_FIND_ERROR(503, "出货记录查询失败"),
     ;
 
     private Integer code;
