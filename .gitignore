@@ -27,3 +27,6 @@ hs_err_pid*
 .idea
 out
 gradle
+build
+META-INF
+META-INF/MANIFEST.MF

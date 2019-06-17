@@ -11,7 +11,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost/retail_management?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
-    username: root
+    username: siriyang
     password: 19980305
     driver-class-name: com.mysql.cj.jdbc.Driver
 

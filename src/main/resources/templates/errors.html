@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head}"></head>
-<body>
-<!--Header-->
-<div id="header" th:replace="~{fragments/header :: header-body}"></div>
-<!--END Header-->
+<body class="fixed-left">
+<div id="wrapper">
+    <!--Header-->
+    <div id="header" th:replace="~{fragments/header :: header-body}"></div>
+    <!--END Header-->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">错误</h4>
+                    </div>
 
-<!--Container-->
-<div id="container" class="">
+                    <p th:text="${errormsg}"></p>
 
-<p th:text="${errormsg}"></p>
-
+                </div>
+                <!--Footer-->
+                <div id="footer-content" th:replace="~{fragments/footer :: footer-content}"></div>
+                <!--END Footer-->
+            </div>
+        </div>
+    </div>
 </div>
-<!--END Container-->
-
-<!--Footer-->
-<div id="footer" th:replace="~{fragments/footer :: footer-content}"></div>
-<!--END Footer-->
-
+<div id="footer" th:replace="~{fragments/footer :: footer}"></div>
 </body>
+
 </html>
