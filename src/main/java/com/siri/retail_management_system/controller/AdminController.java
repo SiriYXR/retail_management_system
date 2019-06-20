@@ -127,6 +127,8 @@ public class AdminController {
                             @RequestParam("username") String username,
                             @RequestParam("password") String password) {
 
+        logger.info("save:" + id + " " + username + " " + password);
+
         Result<Admin> result=null;
 
         if (id!=null){
@@ -134,8 +136,6 @@ public class AdminController {
         }else {
             result=adminService.add(username,password);
         }
-
-        logger.info("save:" + id + " " + username + " " + password);
 
         if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "错误");

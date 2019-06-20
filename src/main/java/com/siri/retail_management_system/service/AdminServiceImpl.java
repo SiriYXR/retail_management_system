@@ -59,7 +59,16 @@ public class AdminServiceImpl implements AdminService {
      */
     public Result<Admin> findByUsername(String username) {
         Result<Admin> result = new Result<>();
-        Admin admin = adminRepository.findByUsername(username);
+        List<Admin> adminListALL = adminRepository.findByUsername(username);
+
+        Admin admin = null;
+        for (Admin i : adminListALL) {
+            if (!i.isDelet()) {
+                admin = i;
+                break;
+            }
+        }
+
         if (admin == null) {
             result.setResultEnum(ResultEnum.USERNAME_WRONG);
         } else {
@@ -101,6 +110,7 @@ public class AdminServiceImpl implements AdminService {
 
     /**
      * 添加管理员
+     *
      * @param username
      * @param password
      * @return
@@ -109,14 +119,14 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public Result<Admin> add(String username, String password) {
         Result<Admin> result = new Result<>();
-        Admin admin = new Admin(username,password);
+        Admin admin = new Admin(username, password);
 
         if (admin == null) {
             result.setResultEnum(ResultEnum.UNKONW_ERROR);
         } else {
 
             logger.info(admin.toString());
-            result=save(admin);
+            result = save(admin);
 
         }
         return result;
@@ -124,6 +134,7 @@ public class AdminServiceImpl implements AdminService {
 
     /**
      * 更新管理员
+     *
      * @param id
      * @param username
      * @param password
@@ -133,12 +144,13 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public Result<Admin> update(Integer id, String username, String password) {
         Result<Admin> result = new Result<>();
-        Admin admin = adminRepository.findById(id).get();
 
-        if(isExistUsername(admin.getId(),admin.getUsername())){
+        if (isExistUsername(id, username)) {
             result.setResultEnum(ResultEnum.ADMIN_EXIST_USERNAME);
             return result;
         }
+
+        Admin admin = adminRepository.findById(id).get();
 
         if (admin == null) {
             result.setResultEnum(ResultEnum.USERNAME_WRONG);
@@ -152,7 +164,7 @@ public class AdminServiceImpl implements AdminService {
                 admin.setPassword(password);
 
                 logger.info(admin.toString());
-                result=save(admin);
+                result = save(admin);
             }
         }
         return result;
@@ -160,6 +172,7 @@ public class AdminServiceImpl implements AdminService {
 
     /**
      * 保存管理员
+     *
      * @param admin
      * @return
      */
@@ -168,7 +181,7 @@ public class AdminServiceImpl implements AdminService {
     public Result<Admin> save(Admin admin) {
         Result<Admin> result = new Result<>();
 
-        if(isExistUsername(admin.getId(),admin.getUsername())){
+        if (isExistUsername(admin.getId(), admin.getUsername())) {
             result.setResultEnum(ResultEnum.ADMIN_EXIST_USERNAME);
             return result;
         }
@@ -211,7 +224,9 @@ public class AdminServiceImpl implements AdminService {
      */
     public Result<Integer> login(String username, String password) {
         Result<Integer> result = new Result<>();
-        Admin admin = adminRepository.findByUsername(username);
+        Result<Admin> r = findByUsername(username);
+        Admin admin = r.getData();
+
         if (admin == null) {
             logger.info(ResultEnum.USERNAME_WRONG.getMsg());
             result.setResultEnum(ResultEnum.USERNAME_WRONG);
@@ -229,13 +244,15 @@ public class AdminServiceImpl implements AdminService {
 
     /**
      * 检查管理员名是否已经存在
+     *
      * @param id
      * @param username
      * @return
      */
     @Override
     public boolean isExistUsername(Integer id, String username) {
-        Admin admin = adminRepository.findByUsername(username);
+        Result<Admin> r = findByUsername(username);
+        Admin admin = r.getData();
         if (admin != null && (id != admin.getId()))
             return true;
         return false;

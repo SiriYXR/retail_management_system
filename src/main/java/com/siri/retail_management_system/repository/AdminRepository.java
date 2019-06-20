@@ -20,6 +20,6 @@ public interface AdminRepository extends JpaRepository<Admin,Integer> {
      * @param username
      * @return
      */
-    Admin findByUsername(String username);
+    List<Admin> findByUsername(String username);
 }
 
