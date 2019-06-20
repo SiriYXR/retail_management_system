@@ -76,7 +76,7 @@ public class AdminServiceImpl implements AdminService {
             logger.info(admin.toString());
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(admin);
-            
+
         }
         return result;
     }
