@@ -72,13 +72,11 @@ public class AdminServiceImpl implements AdminService {
         if (admin == null) {
             result.setResultEnum(ResultEnum.USERNAME_WRONG);
         } else {
-            if (admin.isDelet()) {
-                result.setResultEnum(ResultEnum.ADMIN_DELET);
-            } else {
-                logger.info(admin.toString());
-                result.setResultEnum(ResultEnum.SUCCESS);
-                result.setData(admin);
-            }
+
+            logger.info(admin.toString());
+            result.setResultEnum(ResultEnum.SUCCESS);
+            result.setData(admin);
+            
         }
         return result;
     }
@@ -155,14 +153,17 @@ public class AdminServiceImpl implements AdminService {
         if (admin == null) {
             result.setResultEnum(ResultEnum.USERNAME_WRONG);
         } else {
+            if (admin.isDelet()) {
+                result.setResultEnum(ResultEnum.ADMIN_DELET);
+            } else {
 
-            //修改数据
-            admin.setUsername(username);
-            admin.setPassword(password);
+                //修改数据
+                admin.setUsername(username);
+                admin.setPassword(password);
 
-            logger.info(admin.toString());
-            result = save(admin);
-
+                logger.info(admin.toString());
+                result = save(admin);
+            }
         }
         return result;
     }
