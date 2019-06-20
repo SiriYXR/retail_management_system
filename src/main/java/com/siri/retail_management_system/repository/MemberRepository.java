@@ -3,6 +3,8 @@ package com.siri.retail_management_system.repository;
 import com.siri.retail_management_system.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * @author SiriYang
  * @title: MemberRepository
@@ -17,12 +19,12 @@ public interface MemberRepository extends JpaRepository<Member,Integer> {
      * @param membername
      * @return
      */
-    Member findByMembername(String membername);
+    List<Member> findByMembername(String membername);
 
     /**
      * 通过手机号查询会员
      * @param telephone
      * @return
      */
-    Member findByTelephon(String telephone);
+    List<Member> findByTelephon(String telephone);
 }

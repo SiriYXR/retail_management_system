@@ -52,29 +52,6 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
-    /**
-     * 通过姓名查询会员
-     *
-     * @param membername
-     * @return
-     */
-    @Override
-    public Result<Member> findByMembername(String membername) {
-        Result<Member> result = new Result<>();
-        Member member = memberRepository.findByMembername(membername);
-        if (member == null) {
-            result.setResultEnum(ResultEnum.MEMBER_NAME_WRONG);
-        } else {
-            if (member.isDelet()) {
-                result.setResultEnum(ResultEnum.MEMBER_DELET);
-            } else {
-                logger.info(member.toString());
-                result.setResultEnum(ResultEnum.SUCCESS);
-                result.setData(member);
-            }
-        }
-        return result;
-    }
 
     /**
      * 通过手机号查询会员
@@ -85,17 +62,24 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Result<Member> findByTelephone(String telephone) {
         Result<Member> result = new Result<>();
-        Member member = memberRepository.findByTelephon(telephone);
+        List<Member> memberListAll = memberRepository.findByTelephon(telephone);
+
+        Member member = null;
+        for (Member i : memberListAll) {
+            if (!i.isDelet()) {
+                member = i;
+                break;
+            }
+        }
+
         if (member == null) {
             result.setResultEnum(ResultEnum.MEMBER_TELEPHONE_WRONG);
         } else {
-            if (member.isDelet()) {
-                result.setResultEnum(ResultEnum.MEMBER_DELET);
-            } else {
-                logger.info(member.toString());
-                result.setResultEnum(ResultEnum.SUCCESS);
-                result.setData(member);
-            }
+
+            logger.info(member.toString());
+            result.setResultEnum(ResultEnum.SUCCESS);
+            result.setData(member);
+
         }
         return result;
     }
@@ -127,38 +111,10 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
-    /**
-     * 添加或更新会员
-     *
-     * @param member
-     * @return
-     */
-    @Override
-    @Transactional
-    public Result<Member> addOrUpdate(Member member) {
-        Result<Member> result = new Result<>();
-
-        if (isExistMembername(member.getId(),member.getMembername())){
-            result.setResultEnum(ResultEnum.MEMBER_EXIST_MEMBERNAME);
-            return result;
-        }
-        if (isExistTelephone(member.getId(),member.getTelephon())){
-            result.setResultEnum(ResultEnum.MEMBER_EXIST_TELEPHONE);
-            return result;
-        }
-
-        Member m = memberRepository.save(member);
-        if (m != null) {
-            result.setResultEnum(ResultEnum.SUCCESS);
-            result.setData(m);
-        } else {
-            result.setResultEnum(ResultEnum.MEMBER_ADD_ERROR);
-        }
-        return result;
-    }
 
     /**
      * 添加会员
+     *
      * @param membername
      * @param telephone
      * @return
@@ -167,14 +123,15 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Result<Member> add(String membername, String telephone) {
         Result<Member> result = new Result<>();
-        Member member = new Member(membername,telephone);
+
+        Member member = new Member(membername, telephone);
 
         if (member == null) {
             result.setResultEnum(ResultEnum.UNKONW_ERROR);
         } else {
 
             logger.info(member.toString());
-            result=save(member);
+            result = save(member);
 
         }
         return result;
@@ -182,6 +139,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 修改会员
+     *
      * @param id
      * @param membername
      * @param telephone
@@ -192,6 +150,12 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Result<Member> update(Integer id, String membername, String telephone, Integer points) {
         Result<Member> result = new Result<>();
+
+        if(isExistTelephone(id,telephone)){
+            result.setResultEnum(ResultEnum.MEMBER_EXIST_TELEPHONE);
+            return result;
+        }
+
         Member member = memberRepository.findById(id).get();
 
         if (member == null) {
@@ -206,7 +170,7 @@ public class MemberServiceImpl implements MemberService {
                 member.setPoints(points);
 
                 logger.info(member.toString());
-                result=save(member);
+                result = save(member);
             }
         }
         return result;
@@ -214,6 +178,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 保存会员
+     *
      * @param member
      * @return
      */
@@ -222,11 +187,7 @@ public class MemberServiceImpl implements MemberService {
     public Result<Member> save(Member member) {
         Result<Member> result = new Result<>();
 
-        if (isExistMembername(member.getId(),member.getMembername())){
-            result.setResultEnum(ResultEnum.MEMBER_EXIST_MEMBERNAME);
-            return result;
-        }
-        if (isExistTelephone(member.getId(),member.getTelephon())){
+        if (isExistTelephone(member.getId(), member.getTelephon())) {
             result.setResultEnum(ResultEnum.MEMBER_EXIST_TELEPHONE);
             return result;
         }
@@ -281,29 +242,26 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
-    /**
-     * 检查会员名是否已经存在
-     * @param id
-     * @param membername
-     * @return
-     */
-    @Override
-    public boolean isExistMembername(Integer id, String membername) {
-        Member member = memberRepository.findByMembername(membername);
-        if (member != null && (id != member.getId()))
-            return true;
-        return false;
-    }
 
     /**
      * 检查手机号是否已经存在
+     *
      * @param id
      * @param telephone
      * @return
      */
     @Override
     public boolean isExistTelephone(Integer id, String telephone) {
-        Member member = memberRepository.findByTelephon(telephone);
+        List<Member> memberList = memberRepository.findByTelephon(telephone);
+
+        Member member = null;
+        for (Member i : memberList) {
+            if (!i.isDelet()) {
+                member = i;
+                break;
+            }
+        }
+
         if (member != null && (id != member.getId()))
             return true;
         return false;

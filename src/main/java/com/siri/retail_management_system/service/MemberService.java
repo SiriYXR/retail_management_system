@@ -16,13 +16,9 @@ public interface MemberService {
 
     public Result<Member> findOne(Integer id);
 
-    public Result<Member> findByMembername(String membername);
-
     public Result<Member> findByTelephone(String telephone);
 
     public Result<List<Member>> findAll();
-
-    public Result<Member> addOrUpdate(Member member);
 
     public Result<Member> add(String membername,String telephone);
 
@@ -33,8 +29,6 @@ public interface MemberService {
     public void delete(Integer id);
 
     public Result<Integer> countMember();
-
-    public boolean isExistMembername(Integer id,String membername);
 
     public boolean isExistTelephone(Integer id,String telephone);
 }
