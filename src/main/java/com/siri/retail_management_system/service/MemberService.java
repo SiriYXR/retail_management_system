@@ -24,7 +24,17 @@ public interface MemberService {
 
     public Result<Member> addOrUpdate(Member member);
 
+    public Result<Member> add(String membername,String telephone);
+
+    public Result<Member> update(Integer id,String membername,String telephone,Integer points);
+
+    public Result<Member> save(Member member);
+
     public void delete(Integer id);
 
     public Result<Integer> countMember();
+
+    public boolean isExistMembername(Integer id,String membername);
+
+    public boolean isExistTelephone(Integer id,String telephone);
 }

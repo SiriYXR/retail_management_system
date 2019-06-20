@@ -2,6 +2,9 @@ package com.siri.retail_management_system.repository;
 
 import com.siri.retail_management_system.domain.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
  * @author SiriYang

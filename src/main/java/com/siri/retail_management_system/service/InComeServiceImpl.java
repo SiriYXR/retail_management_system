@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -39,9 +40,13 @@ public class InComeServiceImpl implements InComeService {
         if (inCome == null) {
             result.setResultEnum(ResultEnum.INCOME_ID_WRONG);
         } else {
-            logger.info(inCome.toString());
-            result.setResultEnum(ResultEnum.SUCCESS);
-            result.setData(inCome);
+            if (inCome.isDelet()) {
+                result.setResultEnum(ResultEnum.INCOME_DELET);
+            } else {
+                logger.info(inCome.toString());
+                result.setResultEnum(ResultEnum.SUCCESS);
+                result.setData(inCome);
+            }
         }
         return result;
     }
@@ -49,11 +54,15 @@ public class InComeServiceImpl implements InComeService {
     @Override
     public Result<List<InCome>> findByMerchandiseName(String merchandise_name) {
         Result<List<InCome>> result = new Result<>();
-        List<InCome> inComeList = inComeRepository.findAllByMerchandisename(merchandise_name);
-        if (inComeList == null) {
+        List<InCome> inComeListAll = inComeRepository.findAllByMerchandisename(merchandise_name);
+        if (inComeListAll == null) {
             result.setResultEnum(ResultEnum.MERCHANDISE_NAME_WRONG);
         } else {
-            logger.info(inComeList.toString());
+            List<InCome> inComeList = new LinkedList<>();
+            for (InCome i : inComeListAll) {
+                if (!i.isDelet())
+                    inComeList.add(i);
+            }
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(inComeList);
         }
@@ -63,11 +72,15 @@ public class InComeServiceImpl implements InComeService {
     @Override
     public Result<List<InCome>> findAll() {
         Result<List<InCome>> result = new Result<>();
-        List<InCome> inComeList = inComeRepository.findAll();
-        if (inComeList == null) {
+        List<InCome> inComeListAll = inComeRepository.findAll();
+        if (inComeListAll == null) {
             result.setResultEnum(ResultEnum.INCOME_FIND_ERROR);
         } else {
-            logger.info(inComeList.toString());
+            List<InCome> inComeList = new LinkedList<>();
+            for (InCome i : inComeListAll) {
+                if (!i.isDelet())
+                    inComeList.add(i);
+            }
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(inComeList);
         }
@@ -76,17 +89,18 @@ public class InComeServiceImpl implements InComeService {
 
     @Override
     @Transactional
-    public Result<InCome> addOrUpdate(InCome inCome) {
+    public Result<InCome> add(InCome inCome) {
         Result<InCome> result = new Result<>();
-        InCome i = inComeRepository.save(inCome);
-        Merchandise m = merchandiseRepository.findByName(i.getMerchandisename());
-        m.setNumber(m.getNumber() + i.getNumber());
-        m.setIncome_price(i.getIncome_price());
+        Merchandise m = merchandiseRepository.findByName(inCome.getMerchandisename());
+        m.setNumber(m.getNumber() + inCome.getNumber());
+        m.setIncome_price(inCome.getIncome_price());
         m = merchandiseRepository.save(m);
 
-        if (i != null && m != null) {
+        inCome=inComeRepository.save(inCome);
+
+        if (inCome != null && m != null) {
             result.setResultEnum(ResultEnum.SUCCESS);
-            result.setData(i);
+            result.setData(inCome);
         } else {
             result.setResultEnum(ResultEnum.INCOME_ADD_ERROR);
         }
@@ -94,7 +108,28 @@ public class InComeServiceImpl implements InComeService {
     }
 
     @Override
+    @Transactional
+    public Result<InCome> update(InCome inCome) {
+        Result<InCome> result = new Result<>();
+        InCome income = inComeRepository.save(inCome);
+        if (income != null) {
+            result.setResultEnum(ResultEnum.SUCCESS);
+            result.setData(income);
+        } else {
+            result.setResultEnum(ResultEnum.INCOME_UPDATE_ERROR);
+        }
+        return result;
+    }
+
+    @Override
     public void delete(Integer id) {
-        inComeRepository.deleteById(id);
+        InCome inCome = inComeRepository.findById(id).get();
+        if (inCome == null) {
+            logger.info(ResultEnum.INCOME_ID_WRONG.getMsg());
+        } else {
+            logger.info(inCome.toString());
+            inCome.setDelet(true);
+            update(inCome);
+        }
     }
 }

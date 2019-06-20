@@ -39,9 +39,9 @@
                                     <td><th:block th:text="${sale.createTime}"/></td>
                                     <td><th:block th:text="${sale.updateTime}"/></td>
                                     <td>
-                                        <a th:href="@{/sale/withdraw/{id}(id=${sale.id})}"
-                                           class="btn btn-warning btn-sm waves-effect waves-light m-b-5"><i
-                                                class="fa fa-edit"></i> <span>退货</span></a>
+                                        <!--<a th:href="@{/sale/withdraw/{id}(id=${sale.id})}"-->
+                                           <!--class="btn btn-warning btn-sm waves-effect waves-light m-b-5"><i-->
+                                                <!--class="fa fa-edit"></i> <span>退货</span></a>-->
                                         <a  th:href="@{/sale/delete/{id}(id=${sale.id})}" th:onclick="'return  delPost()'"
                                             class="btn btn-danger btn-sm waves-effect waves-light m-b-5"><i
                                                 class="fa fa-trash-o"></i> <span>删除</span></a>

@@ -113,6 +113,7 @@ public class IncomeController {
         model.addAttribute("title", "进货管理");
         model.addAttribute("active", "income");
 
+
         if (id != null) {
             Result<InCome> result = inComeService.findOne(id);
             if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
@@ -122,7 +123,7 @@ public class IncomeController {
                 income.setNumber(number);
                 income.setIncome_price(income_price);
 
-                result = inComeService.addOrUpdate(income);
+                result = inComeService.update(income);
                 if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
                     model.addAttribute("title", "错误");
                     model.addAttribute("errormsg", result.getErrMessage());
@@ -134,7 +135,7 @@ public class IncomeController {
             }
         } else {
             InCome income = new InCome(merchandisename,supplier,number,income_price);
-            Result<InCome> result = inComeService.addOrUpdate(income);
+            Result<InCome> result = inComeService.add(income);
             if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
                 model.addAttribute("title", "错误");
                 model.addAttribute("errormsg", result.getErrMessage());

@@ -34,6 +34,12 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
+    /**
+     * 跳转到会员主页，列出所有未删除的会员
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping
     public String listMember(Model model,
                              HttpServletRequest request) {
@@ -58,6 +64,13 @@ public class MemberController {
         return "member/member_list";
     }
 
+    /**
+     * 跳转到编辑界面，修改会员
+     * @param model
+     * @param id
+     * @param request
+     * @return
+     */
     @GetMapping("/edit/{id}")
     public String editmember(Model model,
                              @PathVariable("id") Integer id,
@@ -83,6 +96,12 @@ public class MemberController {
         return "member/member_edit";
     }
 
+    /**
+     * 跳转到编辑界面，添加会员
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping("/add")
     public String addMember(Model model,
                             HttpServletRequest request) {
@@ -96,6 +115,15 @@ public class MemberController {
         return "member/member_edit";
     }
 
+    /**
+     * 获取编辑界面数据，保存会员
+     * @param model
+     * @param id
+     * @param membername
+     * @param telephon
+     * @param points
+     * @return
+     */
     @PostMapping("/save")
     public String saveMember(Model model,
                              @RequestParam("id") Integer id,
@@ -103,42 +131,33 @@ public class MemberController {
                              @RequestParam("telephon") String telephon,
                              @RequestParam("points") Integer points) {
 
-        model.addAttribute("title", "会员管理");
-        model.addAttribute("active", "member");
+        Result<Member> result=null;
 
-        if (id != null) {
-            Result<Member> result = memberService.findOne(id);
-            if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
-                Member member = result.getData();
-                member.setMembername(membername);
-                member.setTelephon(telephon);
-                member.setPoints(points);
-
-                result = memberService.addOrUpdate(member);
-                if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
-                    model.addAttribute("title", "错误");
-                    model.addAttribute("errormsg", result.getErrMessage());
-                    return "errors";
-                }
-            } else {
-                model.addAttribute("errormsg", result.getErrMessage());
-                return "errors";
-            }
-        } else {
-            Member member = new Member(membername, telephon);
-            Result<Member> result = memberService.addOrUpdate(member);
-            if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
-                model.addAttribute("title", "错误");
-                model.addAttribute("errormsg", result.getErrMessage());
-                return "errors";
-            }
+        if (id!=null){
+            result=memberService.update(id,membername,telephon,points);
+        }else {
+            result=memberService.add(membername, telephon);
         }
 
         logger.info("save:" + id + " " + membername + " " + telephon);
 
+        if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            logger.error(result.getErrMessage());
+            return "errors";
+        }
+
         return "redirect:/member";
     }
 
+    /**
+     * 删除会员，再返回会员首页
+     * @param model
+     * @param id
+     * @param request
+     * @return
+     */
     @GetMapping("/delete/{id}")
     public String deleteMember(Model model,
                                @PathVariable("id") Integer id,
@@ -152,6 +171,12 @@ public class MemberController {
         return "redirect:/member";
     }
 
+    /**
+     * 异步查询会员手机号
+     * @param param
+     * @param resp
+     * @throws Exception
+     */
     @PostMapping("/telephone")
     public void ajaxFindByTelephone(@RequestBody Map<String, Object> param, HttpServletResponse resp) throws Exception {
 

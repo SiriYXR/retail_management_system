@@ -12,7 +12,7 @@ import java.util.List;
  * @description: 管理员服务类接口
  * @date 2019/4/15 14:01
  */
-public interface AdminService  {
+public interface AdminService {
 
     public Result<Admin> findOne(Integer id);
 
@@ -20,9 +20,16 @@ public interface AdminService  {
 
     public Result<List<Admin>> findAll();
 
-    public Result<Admin> addOrUpdate(Admin admin);
+    public Result<Admin> save(Admin admin);
+
+    public Result<Admin> add(String username, String password);
+
+    public Result<Admin> update(Integer id,String username, String password);
 
     public void delete(Integer id);
 
-    public Result<Integer> login(String username,String password);
+    public Result<Integer> login(String username, String password);
+
+    public boolean isExistUsername(Integer id,String username);
+
 }

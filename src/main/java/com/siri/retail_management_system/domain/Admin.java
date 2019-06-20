@@ -1,5 +1,7 @@
 package com.siri.retail_management_system.domain;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -13,6 +15,7 @@ import java.sql.Timestamp;
  * @date 2019/4/15 13:34
  */
 @Entity
+@Table(name = "admin")
 public class Admin {
     /**
      * ID主键
@@ -25,8 +28,8 @@ public class Admin {
      * 管理员账号，管理员登录时的唯一标志
      */
     @NotEmpty(message = "账号不能为空")
-    @Size(min = 1,max = 20)
-    @Column(nullable = false,length = 20,unique = true) // 映射为字段，值不能为空
+    @Size(min = 1, max = 20)
+    @Column(nullable = false, length = 20, unique = true) // 映射为字段，值不能为空, 值不重复
     private String username;
 
     /**
@@ -34,7 +37,7 @@ public class Admin {
      */
     @NotEmpty(message = "密码不能为空")
     @Size(max = 100)
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String password;
 
     /**
@@ -51,6 +54,12 @@ public class Admin {
     @org.hibernate.annotations.UpdateTimestamp  // 由数据库自动创建时间
     private Timestamp updateTime;
 
+    /**
+     * 是否逻辑删除
+     */
+    @Column(nullable = false)
+    @Type(type = "yes_no")
+    private boolean isDelet;
 
     protected Admin() {  // JPA 的规范要求无参构造函数；设为 protected 防止直接使用
     }
@@ -100,6 +109,14 @@ public class Admin {
         this.updateTime = updateTime;
     }
 
+    public boolean isDelet() {
+        return isDelet;
+    }
+
+    public void setDelet(boolean delet) {
+        isDelet = delet;
+    }
+
     @Override
     public String toString() {
         return "Admin{" +
@@ -108,6 +125,7 @@ public class Admin {
                 ", password='" + password + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", isDelet=" + isDelet +
                 '}';
     }
 }

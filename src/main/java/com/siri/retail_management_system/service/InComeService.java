@@ -21,7 +21,9 @@ public interface InComeService {
 
     public Result<List<InCome>> findAll();
 
-    public Result<InCome> addOrUpdate(InCome inCome);
+    public Result<InCome> add(InCome inCome);
+
+    public Result<InCome> update(InCome inCome);
 
     public void delete(Integer id);
 }

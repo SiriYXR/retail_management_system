@@ -1,5 +1,7 @@
 package com.siri.retail_management_system.domain;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -13,6 +15,7 @@ import java.sql.Timestamp;
  * @date 2019/4/17 13:13
  */
 @Entity
+@Table(name = "member")
 public class Member {
 
     /**
@@ -57,6 +60,13 @@ public class Member {
     @Column(nullable = false)
     @org.hibernate.annotations.UpdateTimestamp  // 由数据库自动创建时间
     private Timestamp updateTime;
+
+    /**
+     * 是否逻辑删除
+     */
+    @Column(nullable = false)
+    @Type(type="yes_no")
+    private boolean isDelet;
 
     protected Member() {
     }
@@ -114,6 +124,14 @@ public class Member {
         this.updateTime = updateTime;
     }
 
+    public void setDelet(boolean delet) {
+        isDelet = delet;
+    }
+
+    public boolean isDelet() {
+        return isDelet;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
@@ -123,6 +141,7 @@ public class Member {
                 ", points=" + points +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", isDelet=" + isDelet +
                 '}';
     }
 }

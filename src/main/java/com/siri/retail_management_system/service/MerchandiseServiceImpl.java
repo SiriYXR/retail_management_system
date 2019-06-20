@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,33 +23,39 @@ import java.util.List;
 @Service
 public class MerchandiseServiceImpl implements MerchandiseService {
 
-    private final static Logger logger= LoggerFactory.getLogger(MerchandiseServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(MerchandiseServiceImpl.class);
 
     @Autowired
     MerchandiseRepository merchandiseRepository;
 
     /**
      * 根据id查询商品
+     *
      * @param id
      * @return
      */
     @Override
     public Result<Merchandise> findOne(Integer id) {
-        Result<Merchandise> result=new Result<>();
-        Merchandise merchandise=merchandiseRepository.findById(id).get();
-        if(merchandise==null){
+        Result<Merchandise> result = new Result<>();
+        Merchandise merchandise = merchandiseRepository.findById(id).get();
+        if (merchandise == null) {
             result.setResultEnum(ResultEnum.MERCHANDISE_ID_WRONG);
-        }
-        else{
-            logger.info(merchandise.toString());
-            result.setResultEnum(ResultEnum.SUCCESS);
-            result.setData(merchandise);
+        } else {
+            if (merchandise.isDelet()) {
+                result.setResultEnum(ResultEnum.MERCHANDISE_DELET);
+            } else {
+                logger.info(merchandise.toString());
+                result.setResultEnum(ResultEnum.SUCCESS);
+                result.setData(merchandise);
+            }
+
         }
         return result;
     }
 
     /**
      * 通过名字查询商品
+     *
      * @param name
      * @return
      */
@@ -59,26 +66,36 @@ public class MerchandiseServiceImpl implements MerchandiseService {
         if (merchandise == null) {
             result.setResultEnum(ResultEnum.MERCHANDISE_NAME_WRONG);
         } else {
-            logger.info(merchandise.toString());
-            result.setResultEnum(ResultEnum.SUCCESS);
-            result.setData(merchandise);
+            if (merchandise.isDelet()) {
+                result.setResultEnum(ResultEnum.MERCHANDISE_DELET);
+            } else {
+                logger.info(merchandise.toString());
+                result.setResultEnum(ResultEnum.SUCCESS);
+                result.setData(merchandise);
+            }
         }
         return result;
     }
 
     /**
      * 查询所有商品
+     *
      * @return
      */
     @Override
     public Result<List<Merchandise>> findAll() {
         Result<List<Merchandise>> result = new Result<>();
 
-        List<Merchandise> merchandiseList = merchandiseRepository.findAll();
+        List<Merchandise> merchandiseListAll = merchandiseRepository.findAll();
 
-        if (merchandiseList == null) {
+        if (merchandiseListAll == null) {
             result.setResultEnum(ResultEnum.MERCHANDISE_FIND_ERROR);
         } else {
+            List<Merchandise> merchandiseList = new LinkedList<>();
+            for (Merchandise i : merchandiseListAll) {
+                if (!i.isDelet())
+                    merchandiseList.add(i);
+            }
             result.setResultEnum(ResultEnum.SUCCESS);
             result.setData(merchandiseList);
         }
@@ -88,6 +105,7 @@ public class MerchandiseServiceImpl implements MerchandiseService {
 
     /**
      * 增加或修改商品
+     *
      * @param merchandise
      * @return
      */
@@ -107,10 +125,19 @@ public class MerchandiseServiceImpl implements MerchandiseService {
 
     /**
      * 删除商品
+     *
      * @param id
      */
     @Override
     public void delete(Integer id) {
-        merchandiseRepository.deleteById(id);
+
+        Merchandise merchandise = merchandiseRepository.findById(id).get();
+        if (merchandise == null) {
+            logger.info(ResultEnum.MERCHANDISE_ID_WRONG.getMsg());
+        } else {
+            logger.info(merchandise.toString());
+            merchandise.setDelet(true);
+            addOrUpdate(merchandise);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.siri.retail_management_system.domain;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -63,6 +65,13 @@ public class Sale {
     @Column(nullable = false)
     @org.hibernate.annotations.UpdateTimestamp  // 由数据库自动创建时间
     private Timestamp updateTime;
+
+    /**
+     * 是否逻辑删除
+     */
+    @Column(nullable = false)
+    @Type(type="yes_no")
+    private boolean isDelet;
 
     private Sale() {
     }
@@ -129,6 +138,14 @@ public class Sale {
         this.updateTime = updateTime;
     }
 
+    public boolean isDelet() {
+        return isDelet;
+    }
+
+    public void setDelet(boolean delet) {
+        isDelet = delet;
+    }
+
     @Override
     public String toString() {
         return "Sale{" +
@@ -139,6 +156,7 @@ public class Sale {
                 ", sale_price=" + sale_price +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", isDelet=" + isDelet +
                 '}';
     }
 }

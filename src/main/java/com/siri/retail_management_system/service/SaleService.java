@@ -17,7 +17,13 @@ public interface SaleService {
 
     public Result<List<Sale>> findAll();
 
-    public Result<Sale> addOrUpdate(Sale sale);
+    public Result<Sale> add(String merchandisename,int number,String telephone);
 
-    public void delete(Integer id);
+    public Result<Sale> update(int id,String merchandisename,int number,String telephone);
+
+    public Result<Sale> save(Sale sale);
+
+    public Result<Boolean> delete(Integer id);
+
+//    public Result<Boolean> withdraw(Integer id);
 }
