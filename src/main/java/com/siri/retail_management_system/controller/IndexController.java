@@ -1,10 +1,11 @@
 package com.siri.retail_management_system.controller;
 
-import com.siri.retail_management_system.domain.Merchandise;
+import com.siri.retail_management_system.domain.InCome;
 import com.siri.retail_management_system.domain.Result;
+import com.siri.retail_management_system.domain.Sale;
+import com.siri.retail_management_system.domain.SystemLog;
 import com.siri.retail_management_system.enums.ResultEnum;
-import com.siri.retail_management_system.service.MemberService;
-import com.siri.retail_management_system.service.MerchandiseServiceImpl;
+import com.siri.retail_management_system.service.*;
 import com.siri.retail_management_system.utils.CookieUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +32,19 @@ public class IndexController {
     private final static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
-    MerchandiseServiceImpl merchandiseService;
+    MerchandiseService merchandiseService;
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    SaleService saleService;
+
+    @Autowired
+    InComeService inComeService;
+
+    @Autowired
+    SystemLogService systemLogService;
 
     @GetMapping
     private String index(Model model,
@@ -46,40 +56,51 @@ public class IndexController {
         model.addAttribute("title", "仪表盘");
         model.addAttribute("active", "panel");
 
+        Result<List<Integer>> resultMerchandise=merchandiseService.countMerchandise();
+        if (resultMerchandise.getErrCode()!=ResultEnum.SUCCESS.getCode()){
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", resultMerchandise.getErrMessage());
+            return "errors";
+        }
+
         Result<Integer> resultCountMember=memberService.countMember();
         if(resultCountMember.getErrCode()!= ResultEnum.SUCCESS.getCode()){
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", resultCountMember.getErrMessage());
-            logger.error(resultCountMember.getErrMessage());
             return "errors";
         }
 
-        Result<List<Merchandise>> resultMerchandise = merchandiseService.findAll();
-        int merchandiseNum,merchandiseClass;
-
-        if (resultMerchandise.getErrCode() == ResultEnum.SUCCESS.getCode()) {
-            merchandiseClass=resultMerchandise.getData().size();
-            merchandiseNum=0;
-            for(Merchandise i : resultMerchandise.getData()){
-                merchandiseNum+=i.getNumber();
-            }
-
-        } else {
+        Result<List<Sale>> salelog=saleService.findNew(5);
+        if (salelog.getErrCode()!=ResultEnum.SUCCESS.getCode()){
             model.addAttribute("title", "错误");
-            model.addAttribute("errormsg", resultMerchandise.getErrMessage());
-            logger.error(resultMerchandise.getErrMessage());
+            model.addAttribute("errormsg", salelog.getErrMessage());
             return "errors";
         }
 
-        model.addAttribute("merchandiseNum", merchandiseNum);
-        model.addAttribute("merchandiseClass", merchandiseClass);
-        model.addAttribute("promotionNum", 0);
+        Result<List<InCome>> incomelog=inComeService.findNew(5);
+        if (incomelog.getErrCode()!=ResultEnum.SUCCESS.getCode()){
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", incomelog.getErrMessage());
+            return "errors";
+        }
+
+        Result<List<SystemLog>> systemlog=systemLogService.findNew(5);
+        if (incomelog.getErrCode()!=ResultEnum.SUCCESS.getCode()){
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", systemlog.getErrMessage());
+            return "errors";
+        }
+
+        model.addAttribute("merchandiseNum", resultMerchandise.getData().get(0));
+        model.addAttribute("merchandiseClass", resultMerchandise.getData().get(1));
+        model.addAttribute("logNum", 0);
         model.addAttribute("memberNum", resultCountMember.getData());
 
-
+        model.addAttribute("salelog", salelog.getData());
+        model.addAttribute("incomelog", incomelog.getData());
+        model.addAttribute("systemlog", systemlog.getData());
 
         logger.info("cookie loginID:" + loginID);
-
 
         return "index";
     }

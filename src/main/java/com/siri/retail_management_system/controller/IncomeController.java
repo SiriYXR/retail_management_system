@@ -34,9 +34,12 @@ public class IncomeController {
     @Autowired
     InComeServiceImpl inComeService;
 
+    @Autowired
+    MerchandiseServiceImpl merchandiseService;
+
     @GetMapping
     public String listIncome(Model model,
-                            HttpServletRequest request) {
+                             HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
             return "redirect:/login";
@@ -61,8 +64,8 @@ public class IncomeController {
 
     @GetMapping("/edit/{id}")
     public String editInCome(Model model,
-                                  @PathVariable("id") Integer id,
-                                  HttpServletRequest request) {
+                             @PathVariable("id") Integer id,
+                             HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
             return "redirect:/login";
@@ -74,7 +77,7 @@ public class IncomeController {
         if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "进货管理");
             model.addAttribute("income", result.getData());
-            model.addAttribute("merchandisename",result.getData().getMerchandisename());
+            model.addAttribute("merchandisename", result.getData().getMerchandisename());
 
         } else {
             model.addAttribute("title", "错误");
@@ -86,10 +89,10 @@ public class IncomeController {
         return "income/income_edit";
     }
 
-    @GetMapping("/add/{name}")
+    @GetMapping("/add/{id}")
     public String addInCome(Model model,
-                                 @PathVariable("name") String name,
-                                 HttpServletRequest request) {
+                            @PathVariable("id") Integer id,
+                            HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
             return "redirect:/login";
@@ -97,50 +100,44 @@ public class IncomeController {
         model.addAttribute("title", "进货管理");
         model.addAttribute("active", "income");
 
-        model.addAttribute("merchandisename",name);
+        Result<Merchandise> result = merchandiseService.findOne(id);
+        if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            return "errors";
+        }
+
+        model.addAttribute("merchandise", result.getData());
 
         return "income/income_edit";
     }
 
     @PostMapping("/save")
     public String saveInCome(Model model,
-                                  @RequestParam("id") Integer id,
-                                  @RequestParam("merchandisename") String merchandisename,
-                                  @RequestParam("number") Integer number,
-                                  @RequestParam("income_price") Double income_price,
-                                  @RequestParam("supplier") String supplier) {
+                             @RequestParam("id") Integer id,
+                             @RequestParam("merchandiseid") Integer merchandiseid,
+                             @RequestParam("merchandisename") String merchandisename,
+                             @RequestParam("number") Integer number,
+                             @RequestParam("income_price") Double income_price,
+                             @RequestParam("supplier") String supplier) {
 
         model.addAttribute("title", "进货管理");
         model.addAttribute("active", "income");
 
-
+        Result<InCome> result = null;
         if (id != null) {
-            Result<InCome> result = inComeService.findOne(id);
-            if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
-                InCome income = result.getData();
-                income.setMerchandisename(merchandisename);
-                income.setSupplier(supplier);
-                income.setNumber(number);
-                income.setIncome_price(income_price);
 
-                result = inComeService.update(income);
-                if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
-                    model.addAttribute("title", "错误");
-                    model.addAttribute("errormsg", result.getErrMessage());
-                    return "errors";
-                }
-            } else {
-                model.addAttribute("errormsg", result.getErrMessage());
-                return "errors";
-            }
+            result = inComeService.update(id, merchandisename, number, income_price, supplier);
+
         } else {
-            InCome income = new InCome(merchandisename,supplier,number,income_price);
-            Result<InCome> result = inComeService.add(income);
-            if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
-                model.addAttribute("title", "错误");
-                model.addAttribute("errormsg", result.getErrMessage());
-                return "errors";
-            }
+            result = inComeService.add(merchandiseid, merchandisename, number, income_price, supplier);
+
+        }
+
+        if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            return "errors";
         }
 
         return "redirect:/income";
@@ -148,8 +145,8 @@ public class IncomeController {
 
     @GetMapping("/delete/{id}")
     public String deleteInCome(Model model,
-                                    @PathVariable("id") Integer id,
-                                    HttpServletRequest request) {
+                               @PathVariable("id") Integer id,
+                               HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
             return "redirect:/login";

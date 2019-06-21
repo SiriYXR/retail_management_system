@@ -53,29 +53,6 @@ public class MerchandiseServiceImpl implements MerchandiseService {
         return result;
     }
 
-    /**
-     * 通过名字查询商品
-     *
-     * @param name
-     * @return
-     */
-    @Override
-    public Result<Merchandise> findByName(String name) {
-        Result<Merchandise> result = new Result<>();
-        Merchandise merchandise = merchandiseRepository.findByName(name);
-        if (merchandise == null) {
-            result.setResultEnum(ResultEnum.MERCHANDISE_NAME_WRONG);
-        } else {
-            if (merchandise.isDelet()) {
-                result.setResultEnum(ResultEnum.MERCHANDISE_DELET);
-            } else {
-                logger.info(merchandise.toString());
-                result.setResultEnum(ResultEnum.SUCCESS);
-                result.setData(merchandise);
-            }
-        }
-        return result;
-    }
 
     /**
      * 查询所有商品
@@ -139,5 +116,31 @@ public class MerchandiseServiceImpl implements MerchandiseService {
             merchandise.setDelet(true);
             addOrUpdate(merchandise);
         }
+    }
+
+    @Override
+    public Result<List<Integer>> countMerchandise() {
+        Result<List<Integer>> result = new Result<>();
+        Result<List<Merchandise>> resultMerchandise = findAll();
+        int merchandiseNum, merchandiseClass;
+
+        if (resultMerchandise.getErrCode() == ResultEnum.SUCCESS.getCode()) {
+            merchandiseClass = resultMerchandise.getData().size();
+            merchandiseNum = 0;
+            for (Merchandise i : resultMerchandise.getData()) {
+                merchandiseNum += i.getNumber();
+            }
+
+            List<Integer> list = new LinkedList<>();
+            list.add(merchandiseNum);
+            list.add(merchandiseClass);
+            result.setData(list);
+            result.setResultEnum(ResultEnum.SUCCESS);
+        } else {
+            result.setResultEnum(ResultEnum.MERCHANDISE_FIND_ERROR);
+            return result;
+        }
+
+        return result;
     }
 }

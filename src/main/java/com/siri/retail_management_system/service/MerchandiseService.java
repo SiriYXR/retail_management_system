@@ -16,11 +16,11 @@ public interface MerchandiseService {
 
     public Result<Merchandise> findOne(Integer id);
 
-    public Result<Merchandise> findByName(String name);
-
     public Result<List<Merchandise>> findAll();
 
     public Result<Merchandise> addOrUpdate(Merchandise merchandise);
+
+    public Result<List<Integer>> countMerchandise();
 
     public void delete(Integer id);
 }

@@ -4,7 +4,9 @@ import com.siri.retail_management_system.constant.WebConstant;
 import com.siri.retail_management_system.domain.Result;
 import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.AdminService;
+import com.siri.retail_management_system.service.SystemLogService;
 import com.siri.retail_management_system.utils.CookieUtil;
+import com.siri.retail_management_system.utils.IpUtil;
 import com.siri.retail_management_system.utils.RandUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -30,6 +33,9 @@ public class LoginController {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    SystemLogService systemLogService;
 
     /**
      * 登陆页面
@@ -60,7 +66,9 @@ public class LoginController {
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
                         Model model,
-                        HttpServletResponse response) {
+                        HttpServletResponse response,
+                        HttpServletRequest request) {
+
         logger.info("username:" + username);
         logger.info("password:" + password);
 
@@ -68,6 +76,7 @@ public class LoginController {
 
         if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
             CookieUtil.setCookie("loginID", result.getData().toString(), response);
+            systemLogService.login(result.getData(),IpUtil.getIpAddr(request));
             return "redirect:/index";
         } else {
             return "redirect:/login/error/" + result.getErrCode();

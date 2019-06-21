@@ -108,11 +108,6 @@
                         <a th:href="@{/sale}" th:class="${active}=='sale'?'waves-effect active':'waves-effect'"><i
                                 class="fa fa-file-text" aria-hidden="true"></i><span> 出货管理 </span></a>
                     </li>
-                    <li th:class="${active}=='promotion'?'active':''">
-                        <a th:href="@{/promotion}"
-                           th:class="${active}=='promotion'?'waves-effect active':'waves-effect'"><i
-                                class="fa fa-comments" aria-hidden="true"></i><span> 促销管理 </span></a>
-                    </li>
                     <li th:class="${active}=='statistic'?'active':''">
                         <a th:href="@{/statistic}"
                            th:class="${active}=='statistic'?'waves-effect active':'waves-effect'"><i
@@ -126,6 +121,11 @@
                     <li th:class="${active}=='admin'?'active':''">
                         <a th:href="@{/admin}" th:class="${active}=='admin'?'waves-effect active':'waves-effect'"><i
                                 class="fa fa-link" aria-hidden="true"></i><span> 管理员管理 </span></a>
+                    </li>
+                    <li th:class="${active}=='log'?'active':''">
+                        <a th:href="@{/log}"
+                           th:class="${active}=='log'?'waves-effect active':'waves-effect'"><i
+                                class="fa fa-comments" aria-hidden="true"></i><span> 日志管理 </span></a>
                     </li>
                     <li th:class="${active}=='setting'?'active':''">
                         <a th:href="@{/setting}"

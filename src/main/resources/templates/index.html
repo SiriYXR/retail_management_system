@@ -26,21 +26,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="mini-stat clearfix bg-purple bx-shadow">
-                                <span class="mini-stat-icon"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
-                                <div class="mini-stat-info text-right">
-                                    总计<span class="counter" th:text="${merchandiseClass}"></span>类商品
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="col-sm-6 col-lg-3">
                             <div class="mini-stat clearfix bg-success bx-shadow">
                                 <span class="mini-stat-icon"><i class="fa fa-cloud-upload"
                                                                 aria-hidden="true"></i></span>
                                 <div class="mini-stat-info text-right">
-                                    正在进行<span class="counter" th:text="${promotionNum}"></span>个促销活动
+                                    总计<span class="counter" th:text="${merchandiseClass}"></span>类商品
                                 </div>
                             </div>
                         </div>
@@ -53,6 +45,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="mini-stat clearfix bg-purple bx-shadow">
+                                <span class="mini-stat-icon"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
+                                <div class="mini-stat-info text-right">
+                                    已记录<span class="counter" th:text="${logNum}"></span>条日志
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="row">
@@ -68,12 +70,11 @@
                                         </div>
                                     </div>
                                     <ul class="list-group">
-                                        <!--<li class="list-group-item" th:each="article : ${articles}">-->
-                                        <!--<span class="badge badge-primary"-->
-                                        <!--th:title="${article.commentsNum}+'条评论'" th:text="${article.commentsNum}"></span>-->
-                                        <!--<a target="_blank" th:href="${commons.site_url('/article/')}+${article.cid}"-->
-                                        <!--th:text="${article.title}"></a>-->
-                                        <!--</li>-->
+                                        <li class="list-group-item" th:each="sale : ${salelog}">
+                                            <span th:title="${sale.updateTime}" th:text="${sale.merchandisename}"></span>
+                                            <span class="badge badge-primary" th:text="'售价：'+${sale.sale_price}"></span>
+                                            <span class="badge badge-primary" th:text="'数量：'+${sale.number}"></span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -90,20 +91,12 @@
                                         </div>
                                     </div>
                                     <ul class="list-group">
-                                        <!--th:unless="${comments}==null and ${#lists.size(comments)}==0">-->
-                                        <!--<li class="list-group-item" th:each="comment : ${comments}">-->
-                                            <!--<div th:if="${comment.url}!=null and ${comment.url}!=''">-->
-                                                <!--<a th:href="@{${comment.url}}" target="_blank"-->
-                                                   <!--th:text="${comment.author}"></a>-->
-                                            <!--</div>-->
-                                            <!--<th:block th:unless="${comment.url}!=null and ${comment.url}!=''"-->
-                                                      <!--th:text="${comment.author}"/>-->
-                                            <!--于-->
-                                            <!--<th:block th:text="${commons.fmtdate(comment.created,'MM月dd日HH:mm')}"/>-->
-                                            <!--：<a-->
-                                                <!--th:href="${commons.site_url('/article/')}+${comment.cid}+'#comments'"-->
-                                                <!--target="_blank" th:utext="${commons.article(comment.content)}"></a>-->
-                                        <!--</li>-->
+                                        <li class="list-group-item" th:each="income : ${incomelog}">
+                                            <span th:title="${income.updateTime}" th:text="${income.merchandisename}"></span>
+                                            <span class="badge badge-primary"
+                                                  th:text="'进价：'+${income.income_price}"></span>
+                                            <span class="badge badge-primary" th:text="'数量：'+${income.number}"></span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -120,9 +113,9 @@
                                         </div>
                                     </div>
                                     <ul class="list-group">
-                                        <!--<li class="list-group-item" th:each="log : ${logs}">-->
-                                        <!--<span th:text="${commons.fmtdate(log.created, 'yyyy-MM-dd HH:mm:ss')} +' => '+ ${log.action}"></span>-->
-                                        <!--</li>-->
+                                        <li class="list-group-item" th:each="log : ${systemlog}">
+                                            <span th:text="${log.updateTime} +' => '+ ${log.info}"></span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

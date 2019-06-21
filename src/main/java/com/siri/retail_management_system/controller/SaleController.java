@@ -66,9 +66,9 @@ public class SaleController {
         return "sale/sale_list";
     }
 
-    @GetMapping("/add/{name}")
+    @GetMapping("/add/{id}")
     public String addSale(Model model,
-                          @PathVariable("name") String name,
+                          @PathVariable("id") Integer id,
                           HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
@@ -77,7 +77,41 @@ public class SaleController {
         model.addAttribute("title", "出货管理");
         model.addAttribute("active", "sale");
 
-        model.addAttribute("merchandisename", name);
+        Result<Merchandise> result = merchandiseService.findOne(id);
+        if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            return "errors";
+        }
+
+        model.addAttribute("merchandise", result.getData());
+
+        return "sale/sale_edit";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editSale(Model model,
+                           @PathVariable("id") Integer id,
+                           HttpServletRequest request){
+
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
+            return "redirect:/login";
+
+        model.addAttribute("title", "出货管理");
+        model.addAttribute("active", "sale");
+
+        Result<Sale> result=saleService.findOne(id);
+        if(result.getErrCode()==ResultEnum.SUCCESS.getCode()){
+            Sale sale=result.getData();
+            model.addAttribute("sale",sale);
+            model.addAttribute("merchandisename",sale.getMerchandisename());
+
+        }else {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            return "errors";
+        }
 
         return "sale/sale_edit";
     }
@@ -85,9 +119,11 @@ public class SaleController {
     @PostMapping("/save")
     public String saveSale(Model model,
                            @RequestParam("id") Integer id,
+                           @RequestParam("merchandiseid") Integer merchandiseid,
                            @RequestParam("merchandisename") String merchandisename,
                            @RequestParam("number") Integer number,
-                           @RequestParam("telephone") String telephone) {
+                           @RequestParam("telephone") String telephone,
+                           @RequestParam("membername") String membername) {
 
         model.addAttribute("title", "出货管理");
         model.addAttribute("active", "sale");
@@ -95,9 +131,9 @@ public class SaleController {
 
         Result<Sale> result = null;
         if (id == null) {
-            result = saleService.add(merchandisename, number, telephone);
+            result = saleService.add(merchandiseid, merchandisename, number, telephone);
         } else {
-            result = saleService.update(id, merchandisename, number, telephone);
+            result = saleService.update(id, merchandisename, number, membername);
         }
 
         if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {

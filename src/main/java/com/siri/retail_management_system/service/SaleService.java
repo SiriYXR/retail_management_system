@@ -17,9 +17,11 @@ public interface SaleService {
 
     public Result<List<Sale>> findAll();
 
-    public Result<Sale> add(String merchandisename,int number,String telephone);
+    public Result<List<Sale>> findNew(int n);
 
-    public Result<Sale> update(int id,String merchandisename,int number,String telephone);
+    public Result<Sale> add(int merchandiseid,String merchandisename, int number, String telephone);
+
+    public Result<Sale> update(int id,String merchandisename, int number, String membername);
 
     public Result<Sale> save(Sale sale);
 

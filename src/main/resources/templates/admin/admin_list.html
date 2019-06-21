@@ -24,18 +24,18 @@
                             <tr>
                                 <th width="5%">ID</th>
                                 <th >账号</th>
-                                <th >密码</th>
+                                <!--<th >密码</th>-->
                                 <th width="14%">创建时间</th>
                                 <th width="14%">修改时间</th>
                                 <th width="13%">操作</th>
-                            </tr>
+                            </tr>1
                             </thead>
                             <tbody>
                             <th:block th:each="admin : ${adminList}">
                                 <tr th:cid="${admin.id}">
                                     <td><th:block th:text="${admin.id}"/></td>
                                     <td><th:block th:text="${admin.username}"/></td>
-                                    <td><th:block th:text="${admin.password}"/></td>
+                                    <!--<td><th:block th:text="${admin.password}"/></td>-->
                                     <td><th:block th:text="${admin.createTime}"/></td>
                                     <td><th:block th:text="${admin.updateTime}"/></td>
                                     <td>

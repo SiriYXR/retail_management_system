@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019/4/15 19:36
  */
 @Controller
-@RequestMapping("/promotion")
-public class PromotionController {
+@RequestMapping("/log")
+public class LogController {
 
-    private final static Logger logger = LoggerFactory.getLogger(PromotionController.class);
+    private final static Logger logger = LoggerFactory.getLogger(LogController.class);
 
     @GetMapping
     public String listPromotion(Model model,
@@ -30,9 +30,9 @@ public class PromotionController {
         if (id == null)
             return "redirect:/login";
 
-        model.addAttribute("title", "促销管理");
-        model.addAttribute("active", "promotion");
+        model.addAttribute("title", "日志管理");
+        model.addAttribute("active", "log");
 
-        return "promotion/promotion_list";
+        return "log/log_list";
     }
 }

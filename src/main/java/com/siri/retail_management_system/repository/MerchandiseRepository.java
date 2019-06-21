@@ -12,10 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MerchandiseRepository extends JpaRepository<Merchandise,Integer> {
 
-    /**
-     * 通过用户名查询会员
-     * @param name
-     * @return
-     */
-    Merchandise findByName(String name);
+
 }

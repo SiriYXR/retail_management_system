@@ -17,13 +17,15 @@ public interface InComeService {
 
     public Result<InCome> findOne(Integer id);
 
-    public Result<List<InCome>> findByMerchandiseName(String merchandise_name);
-
     public Result<List<InCome>> findAll();
 
-    public Result<InCome> add(InCome inCome);
+    public Result<List<InCome>> findNew(int n);
 
-    public Result<InCome> update(InCome inCome);
+    public Result<InCome> add(int merchandiseid,String merchandisename, int number,double incomePrice,String provider);
 
-    public void delete(Integer id);
+    public Result<InCome> update(int id,String merchandisename, int number,double incomePrice,String provider);
+
+    public Result<InCome> save(InCome inCome);
+
+    public Result<InCome> delete(Integer id);
 }

@@ -40,8 +40,9 @@ public enum ResultEnum {
 
     INCOME_ID_WRONG(401, "进货记录ID不存在"),
     INCOME_ADD_ERROR(402, "进货记录添加失败"),
-    INCOME_UPDATE_ERROR(402, "进货记录更新失败"),
-    INCOME_FIND_ERROR(404, "进货记录查询失败"),
+    INCOME_UPDATE_ERROR(403, "进货记录更新失败"),
+    INCOME_SAVE_ERROR(404, "进货记录保存失败"),
+    INCOME_FIND_ERROR(405, "进货记录查询失败"),
     INCOME_DELET(406,"进货记录已删除"),
 
     SALE_ID_WRONG(501, "出货记录ID不存在"),
@@ -50,6 +51,13 @@ public enum ResultEnum {
     SALE_FIND_ERROR(504, "出货记录查询失败"),
     SALE_DELET(506,"出货记录已删除"),
     SALE_LACK_OF_GOODS(507,"商品数量不足"),
+
+    SYSTEMLOG_ID_WRONG(601, "系统日志ID不存在"),
+    SYSTEMLOG_ADD_ERROR(602, "系统日志添加失败"),
+    SYSTEMLOG_UPDATE_ERROR(603, "系统日志更新失败"),
+    SYSTEMLOG_FIND_ERROR(604, "系统日志查询失败"),
+    SYSTEMLOG_DELET(606,"系统日志已删除"),
+
     ;
 
     private Integer code;

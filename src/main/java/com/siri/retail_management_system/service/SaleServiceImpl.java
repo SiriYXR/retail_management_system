@@ -89,6 +89,35 @@ public class SaleServiceImpl implements SaleService {
     }
 
     /**
+     * 返回最新的五个记录
+     *
+     * @return
+     */
+    @Override
+    public Result<List<Sale>> findNew(int n) {
+        Result<List<Sale>> result = new Result<>();
+        Result<List<Sale>> resultAll = findAll();
+        if (resultAll.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            result.setResultEnum(ResultEnum.SALE_FIND_ERROR);
+            return result;
+        }
+
+        List<Sale> sales = resultAll.getData();
+        List<Sale> saleList = new LinkedList<>();
+        int count = 0;
+        for (int i = sales.size(); i > 0; i--) {
+            if (count >= n)
+                break;
+            saleList.add(sales.get(i - 1));
+            count++;
+        }
+        result.setResultEnum(ResultEnum.SUCCESS);
+        result.setData(saleList);
+
+        return result;
+    }
+
+    /**
      * 添加出货记录
      *
      * @param merchandisename
@@ -98,12 +127,12 @@ public class SaleServiceImpl implements SaleService {
      */
     @Override
     @Transactional
-    public Result<Sale> add(String merchandisename, int number, String telephone) {
+    public Result<Sale> add(int merchandiseid, String merchandisename, int number, String telephone) {
         Result<Sale> result = new Result<>();
-        Sale sale = new Sale(merchandisename, number, 0.0);
+        Sale sale = new Sale(merchandisename + "(id:" + merchandiseid + ")", number, 0.0);
 
         //查询商品
-        Merchandise merchandise = merchandiseRepository.findByName(merchandisename);
+        Merchandise merchandise = merchandiseRepository.findById(merchandiseid).get();
         if (merchandise == null) {
             result.setResultEnum(ResultEnum.MERCHANDISE_NAME_WRONG);
             return result;
@@ -118,7 +147,16 @@ public class SaleServiceImpl implements SaleService {
         //查询会员
         Member member = null;
         if (telephone.length() > 0) {
-            member = memberRepository.findByTelephon(telephone);
+
+            List<Member> memberList = memberRepository.findByTelephon(telephone);
+
+            for (Member i : memberList) {
+                if (!i.isDelet()) {
+                    member = i;
+                    break;
+                }
+            }
+
             if (member == null) {
                 result.setResultEnum(ResultEnum.MEMBER_TELEPHONE_WRONG);
                 return result;
@@ -129,8 +167,6 @@ public class SaleServiceImpl implements SaleService {
         }
 
         //修改数据
-        sale.setMerchandisename(merchandisename);
-        sale.setNumber(number);
         merchandise.setNumber(merchandise.getNumber() - number);
         if (member != null) {
             sale.setSale_price(merchandise.getMember_price());
@@ -171,35 +207,21 @@ public class SaleServiceImpl implements SaleService {
      * @param id
      * @param merchandisename
      * @param number
-     * @param telephone
+     * @param membername
      * @return
      */
     @Override
     @Transactional
-    public Result<Sale> update(int id, String merchandisename, int number, String telephone) {
+    public Result<Sale> update(int id, String merchandisename, int number, String membername) {
         Result<Sale> result = new Result<>();
 
         //查询
         Sale sale = saleRepository.findById(id).get();
         if (sale != null) {
             //修改
-            sale.setMembername(merchandisename);
+            sale.setMerchandisename(merchandisename);
             sale.setNumber(number);
-
-            //查询会员
-            Member member = null;
-            if (telephone.length() > 0) {
-                member = memberRepository.findByTelephon(telephone);
-                if (member == null) {
-                    result.setResultEnum(ResultEnum.MEMBER_TELEPHONE_WRONG);
-                    return result;
-                } else if (member.isDelet()) {
-                    result.setResultEnum(ResultEnum.MEMBER_DELET);
-                    return result;
-                } else {
-                    sale.setMembername(member.getMembername());
-                }
-            }
+            sale.setMembername(membername);
 
         } else if (sale.isDelet()) {
             result.setResultEnum(ResultEnum.SALE_DELET);
