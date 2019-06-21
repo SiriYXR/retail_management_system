@@ -117,40 +117,26 @@ public class MerchandiseController {
         model.addAttribute("title", "商品管理");
         model.addAttribute("active", "merchandise");
 
+        Result<Merchandise> result=null;
         if (id != null) {
-            Result<Merchandise> result = merchandiseService.findOne(id);
-            if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
-                Merchandise merchandise = result.getData();
-                merchandise.setName(name);
-                merchandise.setNumber(number);
-                merchandise.setIncome_price(income_price);
-                merchandise.setSale_price(sale_price);
-                merchandise.setMember_price(member_price);
 
-                result = merchandiseService.addOrUpdate(merchandise);
-                systemLogService.newlog(Integer.valueOf(loginID),"修改了商品");
-                if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
-                    model.addAttribute("title", "错误");
-                    model.addAttribute("errormsg", result.getErrMessage());
-                    systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
-                    return "errors";
-                }
-            } else {
-                model.addAttribute("errormsg", result.getErrMessage());
-                systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
-                return "errors";
-            }
+            result =merchandiseService.update(id,name,number,income_price,sale_price,member_price);
+            systemLogService.newlog(Integer.valueOf(loginID),"修改了商品");
+
         } else {
-            Merchandise merchandise = new Merchandise(name, income_price, sale_price, member_price);
-            Result<Merchandise> result = merchandiseService.addOrUpdate(merchandise);
+            result=merchandiseService.add(name, income_price, sale_price, member_price);
             systemLogService.newlog(Integer.valueOf(loginID),"创建了商品");
-            if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
-                model.addAttribute("title", "错误");
-                model.addAttribute("errormsg", result.getErrMessage());
-                systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
-                return "errors";
-            }
+
         }
+
+        if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
+            logger.error(result.getErrMessage());
+            return "errors";
+        }
+
 
         logger.info("save:" + id + " " + name + " " + income_price + " " + sale_price + " " + member_price);
 

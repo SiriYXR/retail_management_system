@@ -100,6 +100,54 @@ public class MerchandiseServiceImpl implements MerchandiseService {
         return result;
     }
 
+    @Override
+    @Transactional
+    public Result<Merchandise> add(String name, double income_price, double sale_price, double member_price) {
+
+        Merchandise merchandise = new Merchandise(name, income_price, sale_price, member_price);
+
+        Result<Merchandise> result=save(merchandise);
+
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Result<Merchandise> update(Integer id, String name, Integer number, double income_price, double sale_price, double member_price) {
+        Result<Merchandise> result=findOne(id);
+        if (result.getErrCode()!=ResultEnum.SUCCESS.getCode()){
+            result.setResultEnum(ResultEnum.MERCHANDISE_ID_WRONG);
+            return result;
+        }
+
+        Merchandise merchandise=result.getData();
+
+        merchandise.setName(name);
+        merchandise.setNumber(number);
+        merchandise.setIncome_price(income_price);
+        merchandise.setSale_price(sale_price);
+        merchandise.setMember_price(member_price);
+
+        result=save(merchandise);
+
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Result<Merchandise> save(Merchandise merchandise) {
+
+        Result<Merchandise> result = new Result<>();
+        Merchandise m = merchandiseRepository.save(merchandise);
+        if (m != null) {
+            result.setResultEnum(ResultEnum.SUCCESS);
+            result.setData(m);
+        } else {
+            result.setResultEnum(ResultEnum.MERCHANDISE_SAVE_ERROR);
+        }
+        return result;
+    }
+
     /**
      * 删除商品
      *

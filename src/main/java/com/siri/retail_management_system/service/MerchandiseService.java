@@ -20,6 +20,12 @@ public interface MerchandiseService {
 
     public Result<Merchandise> addOrUpdate(Merchandise merchandise);
 
+    public Result<Merchandise> add(String name,double income_price,double sale_price,double member_price);
+
+    public Result<Merchandise> update(Integer id,String name,Integer number,double income_price,double sale_price,double member_price);
+
+    public Result<Merchandise> save(Merchandise merchandise);
+
     public Result<List<Integer>> countNumber();
 
     public void delete(Integer id);
