@@ -4,6 +4,7 @@ import com.siri.retail_management_system.domain.Merchandise;
 import com.siri.retail_management_system.domain.Result;
 import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.MerchandiseServiceImpl;
+import com.siri.retail_management_system.service.SystemLogService;
 import com.siri.retail_management_system.utils.CookieUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +33,14 @@ public class MerchandiseController {
     @Autowired
     MerchandiseServiceImpl merchandiseService;
 
+    @Autowired
+    SystemLogService systemLogService;
+
     @GetMapping
     public String listMerchandise(Model model,
                                   HttpServletRequest request) {
-        String id = CookieUtil.getCookieValue("loginID", request);
-        if (id == null)
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
             return "redirect:/login";
 
 
@@ -50,6 +54,7 @@ public class MerchandiseController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -75,6 +80,7 @@ public class MerchandiseController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -102,7 +108,11 @@ public class MerchandiseController {
                                   @RequestParam("number") Integer number,
                                   @RequestParam("income_price") Double income_price,
                                   @RequestParam("sale_price") Double sale_price,
-                                  @RequestParam("member_price") Double member_price) {
+                                  @RequestParam("member_price") Double member_price,
+                                  HttpServletRequest request) {
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
+            return "redirect:/login";
 
         model.addAttribute("title", "商品管理");
         model.addAttribute("active", "merchandise");
@@ -118,26 +128,31 @@ public class MerchandiseController {
                 merchandise.setMember_price(member_price);
 
                 result = merchandiseService.addOrUpdate(merchandise);
+                systemLogService.newlog(Integer.valueOf(loginID),"修改了商品");
                 if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
                     model.addAttribute("title", "错误");
                     model.addAttribute("errormsg", result.getErrMessage());
+                    systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
                     return "errors";
                 }
             } else {
                 model.addAttribute("errormsg", result.getErrMessage());
+                systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
                 return "errors";
             }
         } else {
-            Merchandise merchandise = new Merchandise(name,income_price, sale_price,member_price);
+            Merchandise merchandise = new Merchandise(name, income_price, sale_price, member_price);
             Result<Merchandise> result = merchandiseService.addOrUpdate(merchandise);
+            systemLogService.newlog(Integer.valueOf(loginID),"创建了商品");
             if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
                 model.addAttribute("title", "错误");
                 model.addAttribute("errormsg", result.getErrMessage());
+                systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
                 return "errors";
             }
         }
 
-        logger.info("save:" + id + " " + name+" "+income_price+" "+sale_price+" "+member_price);
+        logger.info("save:" + id + " " + name + " " + income_price + " " + sale_price + " " + member_price);
 
         return "redirect:/merchandise";
     }
@@ -151,14 +166,15 @@ public class MerchandiseController {
             return "redirect:/login";
 
         merchandiseService.delete(id);
+        systemLogService.newlog(Integer.valueOf(loginID),"删除了商品");
 
         return "redirect:/merchandise";
     }
 
     @GetMapping("/info/{id}")
     public String infoMerchandise(Model model,
-                                    @PathVariable("id") Integer id,
-                                    HttpServletRequest request) {
+                                  @PathVariable("id") Integer id,
+                                  HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
             return "redirect:/login";
@@ -171,6 +187,7 @@ public class MerchandiseController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }

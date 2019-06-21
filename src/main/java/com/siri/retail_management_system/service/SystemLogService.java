@@ -27,5 +27,11 @@ public interface SystemLogService {
 
     public Result<Boolean> delete(Integer id);
 
+    public Result<Integer> countNumber();
+
     public Result<SystemLog> login(Integer adminid,String ip);
+
+    public Result<SystemLog> newlog(Integer adminid,String info);
+
+    public Result<SystemLog> errorlog(Integer adminid,String info);
 }

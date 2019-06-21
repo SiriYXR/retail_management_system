@@ -28,7 +28,7 @@ public interface MemberService {
 
     public void delete(Integer id);
 
-    public Result<Integer> countMember();
+    public Result<Integer> countNumber();
 
     public boolean isExistTelephone(Integer id,String telephone);
 }

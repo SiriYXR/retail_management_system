@@ -83,7 +83,7 @@ public class SystemLogServiceImpl implements SystemLogService {
         List<SystemLog> systemLogList = new LinkedList<>();
         int count = 0;
         for (int i = systemLogs.size(); i > 0; i--) {
-            if (count >= n)
+            if (n>0 && count >= n)
                 break;
             systemLogList.add(systemLogs.get(i - 1));
             count++;
@@ -160,6 +160,23 @@ public class SystemLogServiceImpl implements SystemLogService {
     }
 
     @Override
+    public Result<Integer> countNumber() {
+        Result<Integer> result=new Result<>();
+
+        Result<List<SystemLog>> logAll=findAll();
+
+        if (logAll.getErrCode()!=ResultEnum.SUCCESS.getCode()){
+            result.setResultEnum(ResultEnum.SYSTEMLOG_FIND_ERROR);
+            return result;
+        }
+
+        result.setData(logAll.getData().size());
+        result.setResultEnum(ResultEnum.SUCCESS);
+
+        return result;
+    }
+
+    @Override
     public Result<SystemLog> login(Integer adminid, String ip) {
 
         Result<SystemLog> result=new Result<>();
@@ -174,6 +191,42 @@ public class SystemLogServiceImpl implements SystemLogService {
         String info=admin.getUsername()+" 登陆，ip:"+ip;
 
         result=add(info);
+
+        return result;
+    }
+
+    @Override
+    public Result<SystemLog> newlog(Integer adminid, String info) {
+        Result<SystemLog> result=new Result<>();
+
+        Admin admin=adminRepository.findById(adminid).get();
+
+        if (admin==null){
+            result.setResultEnum(ResultEnum.ADMIN_ID_WRONG);
+            return result;
+        }
+
+        String string=admin.getUsername()+info;
+
+        result=add(string);
+
+        return result;
+    }
+
+    @Override
+    public Result<SystemLog> errorlog(Integer adminid, String info) {
+        Result<SystemLog> result=new Result<>();
+
+        Admin admin=adminRepository.findById(adminid).get();
+
+        if (admin==null){
+            result.setResultEnum(ResultEnum.ADMIN_ID_WRONG);
+            return result;
+        }
+
+        String string=admin.getUsername()+" 错误："+info;
+
+        result=add(string);
 
         return result;
     }

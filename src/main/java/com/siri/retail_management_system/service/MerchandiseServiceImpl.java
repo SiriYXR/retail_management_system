@@ -119,7 +119,7 @@ public class MerchandiseServiceImpl implements MerchandiseService {
     }
 
     @Override
-    public Result<List<Integer>> countMerchandise() {
+    public Result<List<Integer>> countNumber() {
         Result<List<Integer>> result = new Result<>();
         Result<List<Merchandise>> resultMerchandise = findAll();
         int merchandiseNum, merchandiseClass;

@@ -56,17 +56,27 @@ public class IndexController {
         model.addAttribute("title", "仪表盘");
         model.addAttribute("active", "panel");
 
-        Result<List<Integer>> resultMerchandise=merchandiseService.countMerchandise();
-        if (resultMerchandise.getErrCode()!=ResultEnum.SUCCESS.getCode()){
+        Result<List<Integer>> resultMerchandiseNumber=merchandiseService.countNumber();
+        if (resultMerchandiseNumber.getErrCode()!=ResultEnum.SUCCESS.getCode()){
             model.addAttribute("title", "错误");
-            model.addAttribute("errormsg", resultMerchandise.getErrMessage());
+            model.addAttribute("errormsg", resultMerchandiseNumber.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),resultMerchandiseNumber.getErrMessage());
             return "errors";
         }
 
-        Result<Integer> resultCountMember=memberService.countMember();
-        if(resultCountMember.getErrCode()!= ResultEnum.SUCCESS.getCode()){
+        Result<Integer> resultMemberNumber=memberService.countNumber();
+        if(resultMemberNumber.getErrCode()!= ResultEnum.SUCCESS.getCode()){
             model.addAttribute("title", "错误");
-            model.addAttribute("errormsg", resultCountMember.getErrMessage());
+            model.addAttribute("errormsg", resultMemberNumber.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),resultMemberNumber.getErrMessage());
+            return "errors";
+        }
+
+        Result<Integer> resultSystemLogNumber=systemLogService.countNumber();
+        if (resultSystemLogNumber.getErrCode()!=ResultEnum.SUCCESS.getCode()){
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", resultSystemLogNumber.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),resultSystemLogNumber.getErrMessage());
             return "errors";
         }
 
@@ -74,6 +84,7 @@ public class IndexController {
         if (salelog.getErrCode()!=ResultEnum.SUCCESS.getCode()){
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", salelog.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),salelog.getErrMessage());
             return "errors";
         }
 
@@ -81,6 +92,7 @@ public class IndexController {
         if (incomelog.getErrCode()!=ResultEnum.SUCCESS.getCode()){
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", incomelog.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),incomelog.getErrMessage());
             return "errors";
         }
 
@@ -88,13 +100,14 @@ public class IndexController {
         if (incomelog.getErrCode()!=ResultEnum.SUCCESS.getCode()){
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", systemlog.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),systemlog.getErrMessage());
             return "errors";
         }
 
-        model.addAttribute("merchandiseNum", resultMerchandise.getData().get(0));
-        model.addAttribute("merchandiseClass", resultMerchandise.getData().get(1));
-        model.addAttribute("logNum", 0);
-        model.addAttribute("memberNum", resultCountMember.getData());
+        model.addAttribute("merchandiseNum", resultMerchandiseNumber.getData().get(0));
+        model.addAttribute("merchandiseClass", resultMerchandiseNumber.getData().get(1));
+        model.addAttribute("memberNum", resultMemberNumber.getData());
+        model.addAttribute("logNum", resultSystemLogNumber.getData());
 
         model.addAttribute("salelog", salelog.getData());
         model.addAttribute("incomelog", incomelog.getData());

@@ -4,6 +4,7 @@ import com.siri.retail_management_system.domain.Member;
 import com.siri.retail_management_system.domain.Result;
 import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.MemberService;
+import com.siri.retail_management_system.service.SystemLogService;
 import com.siri.retail_management_system.utils.CookieUtil;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
@@ -34,6 +35,9 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    SystemLogService systemLogService;
+
     /**
      * 跳转到会员主页，列出所有未删除的会员
      * @param model
@@ -43,8 +47,8 @@ public class MemberController {
     @GetMapping
     public String listMember(Model model,
                              HttpServletRequest request) {
-        String id = CookieUtil.getCookieValue("loginID", request);
-        if (id == null)
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
             return "redirect:/login";
 
         model.addAttribute("active", "member");
@@ -57,6 +61,7 @@ public class MemberController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -89,6 +94,7 @@ public class MemberController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -129,14 +135,20 @@ public class MemberController {
                              @RequestParam("id") Integer id,
                              @RequestParam("membername") String membername,
                              @RequestParam("telephon") String telephon,
-                             @RequestParam("points") Integer points) {
+                             @RequestParam("points") Integer points,
+                             HttpServletRequest request) {
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
+            return "redirect:/login";
 
         Result<Member> result=null;
 
         if (id!=null){
             result=memberService.update(id,membername,telephon,points);
+            systemLogService.newlog(Integer.valueOf(loginID),"修改了会员");
         }else {
             result=memberService.add(membername, telephon);
+            systemLogService.newlog(Integer.valueOf(loginID),"创建了会员");
         }
 
         logger.info("save:" + id + " " + membername + " " + telephon);
@@ -144,6 +156,7 @@ public class MemberController {
         if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -167,6 +180,7 @@ public class MemberController {
             return "redirect:/login";
 
         memberService.delete(id);
+        systemLogService.newlog(Integer.valueOf(loginID),"删除了会员");
 
         return "redirect:/member";
     }

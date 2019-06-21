@@ -227,7 +227,7 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
-    public Result<Integer> countMember() {
+    public Result<Integer> countNumber() {
         Result<Integer> result = new Result<>();
 
         List<Member> memberList = memberRepository.findAll();

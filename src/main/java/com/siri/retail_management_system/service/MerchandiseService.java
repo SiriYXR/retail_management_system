@@ -20,7 +20,7 @@ public interface MerchandiseService {
 
     public Result<Merchandise> addOrUpdate(Merchandise merchandise);
 
-    public Result<List<Integer>> countMerchandise();
+    public Result<List<Integer>> countNumber();
 
     public void delete(Integer id);
 }

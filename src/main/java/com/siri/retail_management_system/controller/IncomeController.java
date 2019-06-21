@@ -6,6 +6,7 @@ import com.siri.retail_management_system.domain.Result;
 import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.InComeServiceImpl;
 import com.siri.retail_management_system.service.MerchandiseServiceImpl;
+import com.siri.retail_management_system.service.SystemLogService;
 import com.siri.retail_management_system.utils.CookieUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,9 @@ public class IncomeController {
     @Autowired
     MerchandiseServiceImpl merchandiseService;
 
+    @Autowired
+    SystemLogService systemLogService;
+
     @GetMapping
     public String listIncome(Model model,
                              HttpServletRequest request) {
@@ -55,6 +59,7 @@ public class IncomeController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -82,6 +87,7 @@ public class IncomeController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -104,6 +110,7 @@ public class IncomeController {
         if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
             return "errors";
         }
 
@@ -119,7 +126,11 @@ public class IncomeController {
                              @RequestParam("merchandisename") String merchandisename,
                              @RequestParam("number") Integer number,
                              @RequestParam("income_price") Double income_price,
-                             @RequestParam("supplier") String supplier) {
+                             @RequestParam("supplier") String supplier,
+                             HttpServletRequest request) {
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
+            return "redirect:/login";
 
         model.addAttribute("title", "进货管理");
         model.addAttribute("active", "income");
@@ -128,15 +139,17 @@ public class IncomeController {
         if (id != null) {
 
             result = inComeService.update(id, merchandisename, number, income_price, supplier);
+            systemLogService.newlog(Integer.valueOf(loginID),"修改了进货记录");
 
         } else {
             result = inComeService.add(merchandiseid, merchandisename, number, income_price, supplier);
-
+            systemLogService.newlog(Integer.valueOf(loginID),"创建了进货记录");
         }
 
         if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
             return "errors";
         }
 
@@ -152,7 +165,7 @@ public class IncomeController {
             return "redirect:/login";
 
         inComeService.delete(id);
-
+        systemLogService.newlog(Integer.valueOf(loginID),"删除了进货记录");
         return "redirect:/income";
     }
 }
