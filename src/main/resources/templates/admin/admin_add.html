@@ -12,45 +12,41 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h4 class="page-title"
-                            th:text="'编辑管理员：'+${admin.username}"></h4>
+                            th:text="添加管理员"></h4>
                     </div>
 
-                    <form th:action="@{/admin/save}" method="post" >
-                        <input hidden="true" th:value="${admin.id}" name="id"/>
+                    <form th:action="@{/admin/add}" method="post">
                         <div class="col-md-12">
                             <div class="form-group col-md-6" style="padding: 0 10px 0 0;">账户
                                 <input type="text" class="form-control" placeholder="请输入账户（必须）" name="username"
-                                       required="required"
-                                       aria-required="true"
-                                       th:value="${admin.username}"/>
-                            </div>
-
-                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;" >旧密码
-                                <input type="password" class="form-control" placeholder="请输入旧密码（必须）" name="oldpassword"
                                        required="required"
                                        aria-required="true"
                                        value=""/>
                             </div>
 
                             <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">新密码
-                                <input type="password" class="form-control" placeholder="请输入新密码"
+                                <input type="password" class="form-control" placeholder="请输入新密码(必须)"
                                        name="newpassword1"
                                        id="newpassword1"
+                                       required="required"
+                                       aria-required="true"
                                        value=""/>
                             </div>
 
                             <div class="form-group col-md-6" style="padding: 0 10px 0 0;clear:both;">重复新密码
                                 <input type="password" class="form-control"
-                                      placeholder="请再次输入新密码"
+                                       placeholder="请再次输入新密码(必须)"
                                        name="newpassword2"
                                        id="newpassword2"
+                                       required="required"
+                                       aria-required="true"
                                        onblur="checkpassword()"
                                        value=""/>
                                 <span id="warning" style="color: red"></span>
                             </div>
 
                             <div class="text-left" style="padding: 0 10px 0 0;clear:both;">
-                                <button type="submit" id="submit" onmouseover="checkpassword()" class="btn btn-primary waves-effect waves-light">保存</button>
+                                <button type="submit" onmouseover="checkpassword()" id="submit" class="btn btn-primary waves-effect waves-light">保存</button>
                                 <button onclick='location.href="/admin"' type="button"
                                         class="btn btn-danger waves-effect waves-light">取消
                                 </button>
@@ -79,7 +75,6 @@
             document.getElementById("submit").disabled = true;
         }
     }
-
 
 </script>
 </body>

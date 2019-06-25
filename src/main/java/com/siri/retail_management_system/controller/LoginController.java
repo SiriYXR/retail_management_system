@@ -6,6 +6,7 @@ import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.AdminService;
 import com.siri.retail_management_system.service.SystemLogService;
 import com.siri.retail_management_system.utils.CookieUtil;
+import com.siri.retail_management_system.utils.EncryptUtil;
 import com.siri.retail_management_system.utils.IpUtil;
 import com.siri.retail_management_system.utils.RandUtil;
 import org.slf4j.Logger;
@@ -71,8 +72,9 @@ public class LoginController {
 
         logger.info("username:" + username);
         logger.info("password:" + password);
+        logger.info("passwordMD5:" + EncryptUtil.stringMD5(password));
 
-        Result<Integer> result = adminService.login(username, password);
+        Result<Integer> result = adminService.login(username, EncryptUtil.stringMD5(password));
 
         if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
             CookieUtil.setCookie("loginID", result.getData().toString(), response);

@@ -6,6 +6,7 @@ import com.siri.retail_management_system.enums.ResultEnum;
 import com.siri.retail_management_system.service.AdminService;
 import com.siri.retail_management_system.service.SystemLogService;
 import com.siri.retail_management_system.utils.CookieUtil;
+import com.siri.retail_management_system.utils.EncryptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class AdminController {
 
     /**
      * 跳转到管理员主页，列出所有未删除的管理员
+     *
      * @param model
      * @param request
      * @return
@@ -58,7 +60,7 @@ public class AdminController {
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
-            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -68,6 +70,7 @@ public class AdminController {
 
     /**
      * 进入编辑界面，修改管理员
+     *
      * @param model
      * @param id
      * @param request
@@ -88,10 +91,11 @@ public class AdminController {
         if (result.getErrCode() == ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "管理员管理");
             model.addAttribute("admin", result.getData());
+            model.addAttribute("isadd", false);
         } else {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
-            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -101,6 +105,7 @@ public class AdminController {
 
     /**
      * 进入编辑界面，添加管理员
+     *
      * @param model
      * @param request
      * @return
@@ -114,46 +119,86 @@ public class AdminController {
 
         model.addAttribute("title", "管理员管理");
         model.addAttribute("active", "admin");
+        model.addAttribute("isadd", true);
 
-        return "admin/admin_edit";
+        return "admin/admin_add";
+    }
+
+    @PostMapping("/add")
+    public String addAdmin(Model model,
+                           @RequestParam("username") String username,
+                           @RequestParam("newpassword1") String newpassword1,
+                           @RequestParam("newpassword2") String newpassword2,
+                           HttpServletRequest request) {
+        String loginID = CookieUtil.getCookieValue("loginID", request);
+        if (loginID == null)
+            return "redirect:/login";
+
+        logger.info("add:" + username + " " + newpassword1);
+
+        Result<Admin> result = null;
+
+        result = adminService.add(username, EncryptUtil.stringMD5(newpassword1));
+        systemLogService.newlog(Integer.valueOf(loginID), "创建了管理员");
+
+
+        if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
+            logger.error(result.getErrMessage());
+            return "errors";
+        }
+
+        return "redirect:/admin";
     }
 
 
     /**
      * 获取前端编辑界面数据，保存管理员
+     *
      * @param model
      * @param id
      * @param username
-     * @param password
      * @return
      */
     @PostMapping("/save")
     public String saveAdmin(Model model,
                             @RequestParam("id") Integer id,
                             @RequestParam("username") String username,
-                            @RequestParam("password") String password,
+                            @RequestParam("oldpassword") String oldpassword,
+                            @RequestParam("newpassword1") String newpassword1,
+                            @RequestParam("newpassword2") String newpassword2,
                             HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
             return "redirect:/login";
 
+        logger.info("save:" + id + " " + username + " " + oldpassword);
 
-        logger.info("save:" + id + " " + username + " " + password);
+        Result<Admin> result = null;
 
-        Result<Admin> result=null;
 
-        if (id!=null){
-            result=adminService.update(id,username,password);
-            systemLogService.newlog(Integer.valueOf(loginID),"修改了管理员");
-        }else {
-            result=adminService.add(username,password);
-            systemLogService.newlog(Integer.valueOf(loginID),"创建了管理员");
+        Result<Integer> checkpassword = adminService.login(username, EncryptUtil.stringMD5(oldpassword));
+
+        if (checkpassword.getErrCode() != ResultEnum.SUCCESS.getCode()) {
+            model.addAttribute("title", "错误");
+            model.addAttribute("errormsg", ResultEnum.PASSWORD_WRONG.getMsg());
+            logger.error(ResultEnum.PASSWORD_WRONG.getMsg());
+            return "errors";
         }
+
+        if ((newpassword1 != null && newpassword2 != null && newpassword1.length() != 0 && newpassword2.length() != 0))
+            result = adminService.update(id, username, EncryptUtil.stringMD5(newpassword1));
+        else
+            result = adminService.update(id, username, EncryptUtil.stringMD5(oldpassword));
+        systemLogService.newlog(Integer.valueOf(loginID), "修改了管理员");
+
 
         if (result.getErrCode() != ResultEnum.SUCCESS.getCode()) {
             model.addAttribute("title", "错误");
             model.addAttribute("errormsg", result.getErrMessage());
-            systemLogService.errorlog(Integer.valueOf(loginID),result.getErrMessage());
+            systemLogService.errorlog(Integer.valueOf(loginID), result.getErrMessage());
             logger.error(result.getErrMessage());
             return "errors";
         }
@@ -163,6 +208,7 @@ public class AdminController {
 
     /**
      * 删除管理员，再跳转到管理员主页
+     *
      * @param model
      * @param id
      * @param request
@@ -171,13 +217,13 @@ public class AdminController {
     @GetMapping("/delete/{id}")
     public String deleteAdmin(Model model,
                               @PathVariable("id") Integer id,
-                           HttpServletRequest request) {
+                              HttpServletRequest request) {
         String loginID = CookieUtil.getCookieValue("loginID", request);
         if (loginID == null)
             return "redirect:/login";
 
         adminService.delete(id);
-        systemLogService.newlog(Integer.valueOf(loginID),"删除了管理员");
+        systemLogService.newlog(Integer.valueOf(loginID), "删除了管理员");
 
         return "redirect:/admin";
     }
